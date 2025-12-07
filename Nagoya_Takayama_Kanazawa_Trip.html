@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冬日北陸之旅 | 現代旅遊規劃儀表板</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Modern Teal & Slate (清爽藍灰調) -->
+    <!-- Primary Accent: #14B8A6 (Teal, for highlights), Background: #F8FAFC (Super Light Gray), Text: #334155 (Slate) -->
+    
+    <!-- Application Structure Plan:
+        1. **Navigation**: Fixed top bar with smooth scrolling links. (Mobile navigation fixed)
+        2. **Dashboard**: Focused on Total Budget Breakdown (Bar Chart) and Travel Time (Bar Chart). NOW INCLUDES EXTERNAL MAP.
+        3. **Continuous Itinerary**: Vertical, continuous list using accordion structure. All dining entries are explicitly detailed.
+        4. **Gourmet Map**: Interactive card grid with city/type filters.
+        5. **Logistics**: Split into Accommodation, Transport, and Entry Ticket Summary.
+    -->
+
+    <!-- Visualization & Content Choices:
+        1. **Travel Map**: Embedded as external IMG tag using the provided URL.
+        2. **Total Budget Breakdown (Bar Chart)**: Summarizes total estimated costs (Accommodation, Transport, Dining, Entry) for the group.
+        3. **Travel Time vs. Transport Type (Bar Chart)**: Compares major travel segments.
+        4. **Timeline UI (Accordion/Vertical List)**: Custom HTML/Tailwind accordion.
+        5. **Interaction**: Smooth scroll navigation, filter buttons for food, and accordion toggle for daily events.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used (FontAwesome icons used instead). NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F8FAFC; /* Light Gray */
+            color: #334155; /* Slate */
+        }
+        .theme-teal { color: #14B8A6; } /* Teal */
+        .bg-theme-teal { background-color: #14B8A6; }
+        
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        
+        /* Chart Container Strict Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            height: 300px;
+            max-height: 300px;
+        }
+
+        /* Card Background Styling for professional look */
+        .card-bg-light {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Timeline Node Styles */
+        .timeline-node {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .timeline-line {
+            z-index: 0;
+        }
+
+        /* Map Image Container Styling for responsiveness */
+        .map-wrapper {
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background-color: #ffffff; /* Ensure background is white for map */
+        }
+        .map-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.relative{position:relative}.sticky{position:sticky}.top-0{top:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-6{margin-top:1.5rem}.mt-auto{margin-top:auto}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-16{height:4rem}.h-\[350px\]{height:350px}.max-h-\[350px\]{max-height:350px}.min-h-screen{min-height:100vh}.max-w-5xl{max-width:64rem}.max-w-7xl{max-width:80rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-10{gap:2.5rem}.gap-12{gap:3rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-8{gap:2rem}.space-x-8 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(2rem * var(--tw-space-x-reverse));margin-left:calc(2rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-l-4{border-left-width:4px}.border-l-8{border-left-width:8px}.border-t{border-top-width:1px}.border-\[\#14B8A6\]{--tw-border-opacity:1;border-color:rgb(20 184 166 / var(--tw-border-opacity, 1))}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-gray-400{--tw-border-opacity:1;border-color:rgb(156 163 175 / var(--tw-border-opacity, 1))}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.border-green-600{--tw-border-opacity:1;border-color:rgb(22 163 74 / var(--tw-border-opacity, 1))}.border-indigo-600{--tw-border-opacity:1;border-color:rgb(79 70 229 / var(--tw-border-opacity, 1))}.border-orange-500{--tw-border-opacity:1;border-color:rgb(249 115 22 / var(--tw-border-opacity, 1))}.border-red-500{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.border-yellow-500{--tw-border-opacity:1;border-color:rgb(234 179 8 / var(--tw-border-opacity, 1))}.bg-\[\#14B8A6\]{--tw-bg-opacity:1;background-color:rgb(20 184 166 / var(--tw-bg-opacity, 1))}.bg-\[\#334155\]{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-\[\#F0F4F8\]{--tw-bg-opacity:1;background-color:rgb(240 244 248 / var(--tw-bg-opacity, 1))}.bg-teal-50{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-4{padding-left:1rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.text-\[\#334155\]{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-teal-50:hover{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-600:hover{--tw-bg-opacity:1;background-color:rgb(13 148 136 / var(--tw-bg-opacity, 1))}.hover\:text-\[\#14B8A6\]:hover{--tw-text-opacity:1;color:rgb(20 184 166 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}@media (min-width: 768px){.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:col-span-1{grid-column:span 1 / span 1}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-map-marked-alt text-2xl theme-teal mr-2"></i>
+                    <span class="font-bold text-xl tracking-wide text-gray-700">冬日北陸之旅</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#dashboard" class="text-gray-600 hover:text-[#14B8A6] transition font-medium">總覽數據</a>
+                    <a href="#itinerary" class="text-gray-600 hover:text-[#14B8A6] transition font-medium">每日行程</a>
+                    <a href="#food" class="text-gray-600 hover:text-[#14B8A6] transition font-medium">美食地圖</a>
+                    <a href="#logistics" class="text-gray-600 hover:text-[#14B8A6] transition font-medium">住宿交通</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 flex flex-col space-y-3 shadow-lg">
+            <a href="#dashboard" class="mobile-link block px-3 py-2 rounded-md text-base font-medium hover:bg-teal-50 text-gray-700">總覽數據</a>
+            <a href="#itinerary" class="mobile-link block px-3 py-2 rounded-md text-base font-medium hover:bg-teal-50 text-gray-700">每日行程</a>
+            <a href="#food" class="mobile-link block px-3 py-2 rounded-md text-base font-medium hover:bg-teal-50 text-gray-700">美食地圖</a>
+            <a href="#logistics" class="mobile-link block px-3 py-2 rounded-md text-base font-medium hover:bg-teal-50 text-gray-700">住宿交通</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-white shadow-inner">
+        <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl font-extrabold text-[#334155] tracking-tight mb-3">名古屋．高山．金澤</h1>
+            <p class="text-xl theme-teal font-semibold mb-6">10天9夜 冬日北陸之旅 (2025/12/22 ~ 12/31)</p>
+            <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+                <span class="bg-teal-50 px-4 py-1.5 rounded-full font-medium"><i class="fa-solid fa-users mr-2 theme-teal"></i>4位成員 (聖叡、淑琪、嬸嬸、媽媽)</span>
+                <span class="bg-teal-50 px-4 py-1.5 rounded-full font-medium"><i class="fa-solid fa-mountain-sun mr-2 theme-teal"></i>行程風格：輕鬆慢活</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- 地圖標題 -->
+        <div class="mb-6">
+             <h3 class="text-2xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">冬日北陸之旅 10日遊地圖</h3>
+        </div>
+
+        <!-- 嵌入地圖圖像 (使用您提供的外部連結) -->
+        <div class="map-wrapper">
+            <!-- IMPORTANT: 使用外部連結確保在 Canvas 環境中穩定顯示 -->
+            <img src="https://i.meee.com.tw/9mdUFxM.png" alt="冬日北陸之旅 10日遊地圖" class="">
+        </div>
+
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">行程總覽與費用預算 (TWD)</h2>
+            <p class="mt-3 text-gray-500">此區塊提供四位成員總計的費用估算，以及主要長途移動的時間成本分析。 (匯率 JPY ≈ 0.20 TWD)</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Chart 1: Total Budget Breakdown -->
+             <div class="card-bg-light p-6 shadow-xl border border-gray-100">
+                <h3 class="text-xl font-semibold mb-4 text-center text-gray-700">總預算分類估算 (4人份總計)</h3>
+                <div class="chart-container h-[350px] max-h-[350px]">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+                <div class="mt-6 text-center text-sm text-gray-500 bg-teal-50 p-3 rounded-lg">
+                    <p><i class="fa-solid fa-coins mr-1 theme-teal"></i> 預估總花費約 **$110,611 TWD** (不含機票與個人購物)。</p>
+                </div>
+            </div>
+
+            <!-- Chart 2: Travel Time -->
+            <div class="card-bg-light p-6 shadow-xl border border-gray-100">
+                <h3 class="text-xl font-semibold mb-4 text-center text-gray-700">主要交通移動耗時 (小時)</h3>
+                <div class="chart-container h-[350px] max-h-[350px]">
+                    <canvas id="timeChart"></canvas>
+                </div>
+                <div class="mt-6 text-center text-sm text-gray-500 bg-teal-50 p-3 rounded-lg">
+                    <p><i class="fa-solid fa-clock mr-1 theme-teal"></i> 最長的移動日 (高山至金澤) 需預留約 4.5 小時。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Itinerary Section (Full Vertical List) -->
+    <section id="itinerary" class="py-16 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">每日行程精華</h2>
+                <p class="mt-3 text-gray-500">點擊任一日的標題可展開或收合詳細的時程與建議路線。所有景點均附有 Google Maps 連結。</p>
+            </div>
+
+            <div id="full-itinerary-container" class="space-y-6">
+                <!-- Full Itinerary content injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Food Map Section -->
+    <section id="food" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">美食口袋名單與地圖</h2>
+            <p class="mt-3 text-gray-500">篩選您想找的城市或美食類別，輕鬆找到附近的好味道！</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-3 mb-10 justify-center">
+            <button class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold transition bg-[#14B8A6] text-white shadow-md hover:bg-teal-600" data-filter="all">全部美食</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="nagoya">名古屋</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="takayama">高山</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="kanazawa">金澤</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="main">正餐/主食</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="sweet">甜點/小吃</button>
+        </div>
+
+        <!-- Restaurant Grid -->
+        <div id="restaurant-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards injected by JS -->
+        </div>
+    </section>
+
+    <!-- Logistics Section (Accommodation & Transport) -->
+    <section id="logistics" class="py-16 bg-[#F0F4F8]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                
+                <!-- Col 1: Accommodation -->
+                <div class="lg:col-span-1">
+                    <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4 mb-8">住宿資訊 (9晚, TWD)</h2>
+                    <div class="space-y-6">
+                        <!-- Hotel 1 -->
+                        <div class="card-bg-light p-6 shadow-md border border-l-8 border-yellow-500">
+                            <h3 class="font-extrabold text-xl text-gray-800 mb-1">名古屋市筒井町 STAY</h3>
+                            <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/22-24 (2晚)</p>
+                            <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $13,019</p>
+                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Nagoya+Tsutsuicho+STAY" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
+                        </div>
+
+                        <!-- Hotel 2 -->
+                        <div class="card-bg-light p-6 shadow-md border border-l-8 border-green-600">
+                            <h3 class="font-extrabold text-xl text-gray-800 mb-1">HOTEL AMANEK Hida Takayama</h3>
+                            <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/24-27 (3晚)</p>
+                            <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $12,754</p>
+                            <a href="https://www.google.com/maps/search/?api=1&amp;query=HOTEL+AMANEK+Hida+Takayama" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
+                        </div>
+
+                        <!-- Hotel 3 -->
+                        <div class="card-bg-light p-6 shadow-md border border-l-8 border-indigo-600">
+                            <h3 class="font-extrabold text-xl text-gray-800 mb-1">清蓮 Le Lotus Bleu</h3>
+                            <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/27-29 (2晚)</p>
+                            <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $12,527</p>
+                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Le+Lotus+Bleu+Kanazawa" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
+                        </div>
+                        
+                        <!-- Hotel 4 -->
+                        <div class="card-bg-light p-6 shadow-md border border-l-8 border-yellow-500">
+                            <h3 class="font-extrabold text-xl text-gray-800 mb-1">Compass Hotel Nagoya</h3>
+                            <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/29-31 (2晚)</p>
+                            <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $11,154</p>
+                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Compass+Hotel+Nagoya" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2: Transport -->
+                <div class="lg:col-span-1">
+                    <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4 mb-8">關鍵長途交通接駁</h2>
+                    <p class="text-sm text-gray-500 mb-4 font-semibold">費用估算為單人單程 (除非另有標註)</p>
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-red-500">
+                            <p class="font-bold">NGO ⇋ 名古屋市區</p>
+                            <p class="text-sm text-gray-600">名鐵特急/μ-SKY: **1,430 JPY** (~ $286 TWD)</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-orange-500">
+                            <p class="font-bold">名古屋 ⇋ 高山</p>
+                            <p class="text-sm text-gray-600">JR 飛驒特急: **5,610 JPY** (~ $1,122 TWD)</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-yellow-500">
+                            <p class="font-bold">高山 ⇋ 白川鄉 ⇋ 金澤</p>
+                            <p class="text-sm text-gray-600 font-bold">4人總計已付: **$4,023 TWD**</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-blue-500">
+                            <p class="font-bold">金澤 ⇋ 名古屋</p>
+                            <p class="text-sm text-gray-600">JR 特急 Shirasagi: **9,850 JPY** (~ $1,970 TWD)</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-gray-400">
+                            <p class="font-bold">市內交通/巴士</p>
+                            <p class="text-sm text-gray-600">依行程安排彈性使用，請預留每日約 **500 JPY/人** 預算。</p>
+                        </li>
+                    </ul>
+                </div>
+
+                 <!-- Col 3: Entry Tickets Summary (NEW BLOCK) -->
+                <div class="lg:col-span-1">
+                    <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4 mb-8">景點門票總覽 (TWD)</h2>
+                    <p class="text-sm text-gray-500 mb-4 font-semibold">費用估算為 4 人團體總計</p>
+                    <ul class="space-y-4 text-gray-700">
+                        <!-- Calculated total entry cost for 4 people -->
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-green-600">
+                            <p class="font-bold text-lg text-green-700">總門票估算 (4人合計)</p>
+                            <p class="text-2xl font-extrabold text-green-800 mt-1">$2,400 TWD</p>
+                            <p class="text-xs text-gray-500 mt-2">（主要景點：犬山城、德川園、高山陣屋、飛驒之里、兼六園）</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-green-500">
+                            <p class="font-bold">犬山城 (550 JPY)</p>
+                            <p class="text-sm text-gray-600">4人總計約 **$440 TWD**</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-green-500">
+                            <p class="font-bold">高山陣屋 (440 JPY)</p>
+                            <p class="text-sm text-gray-600">4人總計約 **$352 TWD**</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-green-500">
+                            <p class="font-bold">飛驒之里 (700 JPY)</p>
+                            <p class="text-sm text-gray-600">4人總計約 **$560 TWD**</p>
+                        </li>
+                        <li class="card-bg-light p-5 shadow-sm border-l-4 border-green-500">
+                            <p class="font-bold">兼六園 (320 JPY)</p>
+                            <p class="text-sm text-gray-600">4人總計約 **$256 TWD**</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#334155] text-white py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-2 text-lg font-medium"><i class="fa-solid fa-map-pin theme-teal mr-2"></i> 願每一段旅程都成為最美的回憶。</p>
+            <p class="text-gray-400 text-sm">Design by Your Travel Planner</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Estimated Costs (JPY, Per Person, One-Way unless noted) ---
+        const JPY_TWD_RATE = 0.20;
+        const GROUP_SIZE = 4;
+
+        const COSTS = {
+            ACCOMMODATION: 13019 + 12754 + 12527 + 11154, // TWD, Total Group Cost
+            TRANSPORT: {
+                NGO_NAGOYA: 1430, // JPY: Meitetsu u-SKY, one-way
+                NAGOYA_TAKAYAMA: 5610, // JPY: JR Wide View Hida, one-way
+                TAKAYAMA_KANAZAWA_FIXED: 4023, // TWD, Group total
+                KANAZAWA_NAGOYA: 9850, // JPY: JR Shirasagi/Transfer, one-way
+            },
+            DINING: {
+                // Specified Meals (Estimated JPY/person)
+                熱田蓬萊軒: 4600,
+                仙石すし本店: 2500,
+                麵屋獅子丸: 1600,
+                味藏天國: 5500,
+                矢場味噌豬排: 2500, 
+                馬喰一代午餐: 3500, // Day 9 Lunch
+                金澤關東煮赤玉本店: 4000, 
+                金澤海鮮井近江町: 3000, 
+                金澤蕎麥麵: 2000, // Day 8 Lunch
+                高山鍛治橋拉麵: 1000, // Day 5 Lunch
+                高山牛排: 4500, // Day 4 Dinner
+                犬山城下町輕食: 1500, // Day 2 Lunch
+                白川鄉簡餐: 1800, // Day 6 Lunch (Inaka Soba/Set)
+                // Snacks & Light Meals (Estimated JPY/person)
+                飛驒牛握壽司_重兵衛: 1000,
+                高山林盛堂_點心: 500,
+                石川屋本舖_點心: 500,
+                // General Estimated Dining (Average per person)
+                GENERAL_MEAL_LIGHT: 1500, 
+                GENERAL_MEAL_STANDARD: 2500, 
+            },
+            ENTRY: {
+                犬山城: 550, // JPY
+                德川園: 300, // JPY
+                熱田神宮: 0, 
+                高山陣屋: 440, // JPY
+                飛驒之里: 700, // JPY
+                兼六園: 320, // JPY
+            }
+        };
+        
+        // --- Itinerary Data ---
+        const itineraryData = [
+            { 
+                day: 1, 
+                date: "12/22 (一)", 
+                title: "抵達名古屋", 
+                events: [
+                { time: "14:50", title: "高雄起飛", type: "transport", desc: "台灣虎航 IT268", icon: "fa-plane" },
+                { time: "18:50", title: "抵達名古屋中部機場", type: "transport", desc: "入境手續、領取行李", icon: "fa-passport" },
+                { time: "20:00", title: "搭乘名鐵前往市區", type: "transport", desc: `名鐵 μ-SKY (估計每人 $${(COSTS.TRANSPORT.NGO_NAGOYA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-train" },
+                { time: "21:00", title: "飯店 Check-in", type: "stay", desc: "名古屋市筒井町 STAY", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Nagoya+Tsutsuicho+STAY" },
+                { time: "22:00", title: "晚餐: 名古屋車站周邊拉麵", type: "food", desc: `山下通拉麵等 (估計每人 $${(COSTS.DINING.GENERAL_MEAL_LIGHT * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=名古屋+車站周邊+拉麵" }
+            ]},
+            { 
+                day: 2, 
+                date: "12/23 (二)", 
+                title: "名古屋歷史散策 (犬山城/德川園)", 
+                events: [
+                { time: "09:00", title: "犬山城 & 城下町", type: "spot", desc: `門票估計每人 $${(COSTS.ENTRY.犬山城 * JPY_TWD_RATE).toFixed(0)} TWD`, icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
+                { time: "12:30", title: "午餐: 犬山壽司店壽俵屋", type: "food", desc: `米包壽司/田樂 (估計每人 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=犬山壽司店壽俵屋" },
+                { time: "15:00", title: "德川園", type: "spot", desc: `門票估計每人 $${(COSTS.ENTRY.德川園 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Tokugawaen" },
+                { time: "18:30", title: "晚餐: 麵屋獅子丸", type: "food", desc: `濃郁雞白湯拉麵 (估計每人 $${(COSTS.DINING.麵屋獅子丸 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" }
+            ]},
+            { 
+                day: 3, 
+                date: "12/24 (三)", 
+                title: "熱田神宮 & 前往高山", 
+                events: [
+                { time: "09:00", title: "熱田神宮", type: "spot", desc: "莊嚴參拜 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Jingu" },
+                { time: "12:00", title: "午餐: 熱田蓬萊軒", type: "food", desc: `鰻魚飯三吃 (估計每人 $${(COSTS.DINING.熱田蓬萊軒 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
+                { time: "14:30", title: "名古屋車站移動", type: "transport", desc: `搭乘 JR 飛驒特急 (估計每人 $${(COSTS.TRANSPORT.NAGOYA_TAKAYAMA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-train" },
+                { time: "17:00", title: "抵達高山 & Check-in", type: "stay", desc: "HOTEL AMANEK Hida Takayama", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=HOTEL+AMANEK+Hida+Takayama" },
+                { time: "19:30", title: "晚餐: 味藏天國", type: "food", desc: `JA直營飛驒牛燒肉 (估計每人 $${(COSTS.DINING.味藏天國 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-fire", link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" }
+            ]},
+            { 
+                day: 4, 
+                date: "12/25 (四)", 
+                title: "高山老街與朝市", 
+                events: [
+                { time: "08:00", title: "宮川朝市", type: "spot", desc: "逛早市、買農產品、小吃 (免門票)", icon: "fa-carrot", link: "https://www.google.com/maps/search/?api=1&query=Miyagawa+Morning+Market" },
+                { time: "10:00", title: "飛驒高山老街 (三町通)", type: "spot", desc: "漫步古街，品嚐小吃 (免門票)", icon: "fa-store", link: "https://www.google.com/maps/search/?api=1&query=Takayama+Old+Town" },
+                { time: "12:30", title: "午餐: 飛驒牛握壽司「重兵衛」", type: "food", desc: `特色點心 (估計每人 $${(COSTS.DINING.飛驒牛握壽司_重兵衛 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Jyubei+Takayama" },
+                { time: "14:30", title: "高山陣屋", type: "spot", desc: `江戶時代官府 (門票估計每人 $${(COSTS.ENTRY.高山陣屋 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-landmark", link: "https://www.google.com/maps/search/?api=1&query=Takayama+Jinya" },
+                { time: "16:00", title: "高山林盛堂", type: "food", desc: `點心時間: おわら玉天 (估計每人 $${(COSTS.DINING.高山林盛堂_點心 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-cookie-bite", link: "https://www.google.com/maps/search/?api=1&query=Rinseido+Takayama" },
+                { time: "18:30", title: "晚餐: 飛驒牛專賣店「丸明」", type: "food", desc: `飛驒牛排/壽喜燒 (估計每人 $${(COSTS.DINING.高山牛排 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-fire", link: "https://www.google.com/maps/search/?api=1&query=丸明+高山" }
+            ]},
+            { 
+                day: 5, 
+                date: "12/26 (五)", 
+                title: "合掌造聚落體驗", 
+                events: [
+                { time: "09:30", title: "飛驒之里 (飛騨の里)", type: "spot", desc: `合掌造民家園 (門票估計每人 $${(COSTS.ENTRY.飛驒之里 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-mountain-sun", link: "https://www.google.com/maps/search/?api=1&query=Hida+Folk+Village" },
+                { time: "12:30", title: "午餐: 鍛治橋拉麵", type: "food", desc: `在地高山拉麵 (估計每人 $${(COSTS.DINING.高山鍛治橋拉麵 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=鍛治橋拉麵" },
+                { time: "15:00", title: "櫻山八幡宮", type: "spot", desc: "欣賞高山祭屋台 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Sakurayama+Hachimangu" },
+                { time: "18:30", title: "晚餐: 鄉土料理店「京屋」", type: "food", desc: `品嚐朴葉味噌燒等特色和食 (估計每人 $${(COSTS.DINING.GENERAL_MEAL_STANDARD * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-hotel", link: "https://www.google.com/maps/search/?api=1&query=京屋+高山" }
+            ]},
+            { 
+                day: 6, 
+                date: "12/27 (六)", 
+                title: "白川鄉 & 跨城至金澤", 
+                events: [
+                { time: "12:10", title: "高山 → 白川鄉 → 金澤", type: "transport", desc: `長途交通日 (4人總計 $${COSTS.TRANSPORT.TAKAYAMA_KANAZAWA_FIXED.toLocaleString()} TWD)`, icon: "fa-bus" },
+                { time: "13:00", title: "午餐: 白川鄉「落人」茶屋", type: "food", desc: `品嚐合掌村簡餐/蕎麥麵 (估計每人 $${(COSTS.DINING.白川鄉簡餐 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-snowflake", link: "https://www.google.com/maps/search/?api=1&query=落人茶屋+白川鄉" },
+                { time: "19:40", title: "Check-in", type: "stay", desc: "清蓮 Le Lotus Bleu (金澤)", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Le+Lotus+Bleu+Kanazawa" },
+                { time: "20:30", title: "晚餐: 金澤站「黑百合」餐廳", type: "food", desc: `金澤站內特色料理 (估計每人 $${(COSTS.DINING.GENERAL_MEAL_STANDARD * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=黑百合+金澤" }
+            ]},
+            { 
+                day: 7, 
+                date: "12/28 (日)", 
+                title: "金澤經典名所", 
+                events: [
+                { time: "09:00", title: "兼六園", type: "spot", desc: `日本三大名園 (門票估計每人 $${(COSTS.ENTRY.兼六園 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Kenrokuen" },
+                { time: "11:30", title: "東茶屋街 & 主計町茶屋街", type: "spot", desc: "金箔冰淇淋、懷舊藝妓街景 (免門票)", icon: "fa-fan", link: "https://www.google.com/maps/search/?api=1&query=Higashi+Chaya+District" },
+                { time: "13:00", title: "午餐: 近江町市場海鮮丼", type: "food", desc: `市場內「近江町食堂」或「井之彌」 (估計每人 $${(COSTS.DINING.金澤海鮮井近江町 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-fish", link: "https://www.google.com/maps/search/?api=1&query=近江町食堂" },
+                { time: "15:30", title: "石川屋本舖", type: "food", desc: `點心時間: KAICHIN 琥珀糖 (估計每人 $${(COSTS.DINING.石川屋本舖_點心 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-gift", link: "https://www.google.com/maps/search/?api=1&query=Ishikawaya+Honpo" },
+                { time: "18:30", title: "晚餐: 關東煮「赤玉本店」", type: "food", desc: `金澤特色關東煮專賣店 (估計每人 $${(COSTS.DINING.金澤關東煮赤玉本店 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=關東煮+赤玉本店+金澤" }
+            ]},
+            { 
+                day: 8, 
+                date: "12/29 (一)", 
+                title: "金澤武士與返程", 
+                events: [
+                { time: "09:30", title: "長町武家屋敷跡", type: "spot", desc: "古老的土牆與武士住宅區 (免門票)", icon: "fa-house-chimney-user", link: "https://www.google.com/maps/search/?api=1&query=Nagamachi+Bukeyashiki" },
+                { time: "11:00", title: "尾山神社", type: "spot", desc: "和洋折衷的特色神門 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Oyama+Shrine" },
+                { time: "13:00", title: "午餐: 手打蕎麥麵 YABUDA", type: "food", desc: `金澤車站附近蕎麥麵專賣店 (估計每人 $${(COSTS.DINING.金澤蕎麥麵 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=手打蕎麥麵+兼六園+YABUDA" },
+                { time: "15:00", title: "金澤 → 名古屋", type: "transport", desc: `JR 特急 Shirasagi 號 (估計每人 $${(COSTS.TRANSPORT.KANAZAWA_NAGOYA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-train" },
+                { time: "18:00", title: "抵達名古屋 & Check-in", type: "stay", desc: "Compass Hotel Nagoya", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Compass+Hotel+Nagoya" },
+                { time: "20:00", title: "晚餐: 矢場味噌豬排", type: "food", desc: `名古屋名物味噌豬排 (估計每人 $${(COSTS.DINING.矢場味噌豬排 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=矢場味噌豬排+名古屋" }
+            ]},
+            { 
+                day: 9, 
+                date: "12/30 (二)", 
+                title: "名古屋市區與購物", 
+                events: [
+                { time: "09:00", title: "早餐", type: "stay", desc: "享用飯店簡易早餐", icon: "fa-coffee" },
+                { time: "10:30", title: "大須觀音 & 商店街", type: "spot", desc: "逛街、參拜、購買雜貨 (免門票)", icon: "fa-store", link: "https://www.google.com/maps/search/?api=1&query=Osu+Kannon" },
+                { time: "13:00", title: "午餐: 馬喰一代 名古屋WEST", type: "food", desc: `飛驒牛燒肉午間套餐 (估計每人 $${(COSTS.DINING.馬喰一代午餐 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-fire", link: "https://www.google.com/maps/search/?api=1&query=燒肉+飛驒牛一頭家+馬喰一代+名古屋WEST" },
+                { time: "14:30", title: "名站周邊購物", type: "spot", desc: "高島屋、電器行採購伴手禮 (自由活動)", icon: "fa-bag-shopping" },
+                { time: "18:30", title: "晚餐: 仙石すし 本店", type: "food", desc: `超厚切高CP值壽司 (估計每人 $${(COSTS.DINING.仙石すし本店 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-fish", link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi+Honten" }
+            ]},
+            { 
+                day: 10, 
+                date: "12/31 (三)", 
+                title: "回程", 
+                events: [
+                { time: "09:00", title: "早餐 & 最後整理", type: "stay", desc: "飯店簡易早餐，整理行李", icon: "fa-suitcase" },
+                { time: "12:00", title: "午餐: 名古屋車站周邊", type: "food", desc: `在名站周邊享用最後一餐 (估計每人 $${(COSTS.DINING.GENERAL_MEAL_LIGHT * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils" },
+                { time: "15:30", title: "前往機場", type: "transport", desc: `搭乘名鐵 μ-SKY (估計每人 $${(COSTS.TRANSPORT.NGO_NAGOYA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-train" },
+                { time: "17:30", title: "機場 Check-in", type: "transport", desc: "辦理登機手續及免稅店購物", icon: "fa-plane-departure" },
+                { time: "19:40", title: "搭機返台", type: "transport", desc: "台灣虎航 IT269 / 19:40 NGO → 22:35 KHH", icon: "fa-plane" }
+            ]}
+        ];
+
+        const restaurants = [
+            { name: "熱田蓬萊軒", type: "main", city: "nagoya", desc: `名古屋名物 鰻魚飯三吃 (估計 $${(COSTS.DINING.熱田蓬萊軒 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
+            { name: "仙石すし 本店", type: "main", city: "nagoya", desc: `超厚切壽司 (估計 $${(COSTS.DINING.仙石すし本店 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi+Honten" },
+            { name: "麵屋獅子丸", type: "main", city: "nagoya", desc: `濃郁雞白湯拉麵 (估計 $${(COSTS.DINING.麵屋獅子丸 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" },
+            { name: "矢場味噌豬排", type: "main", city: "nagoya", desc: `名古屋名物味噌豬排 (估計 $${(COSTS.DINING.矢場味噌豬排 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=矢場味噌豬排+名古屋" },
+            { name: "燒肉 馬喰一代", type: "main", city: "nagoya", desc: `飛驒牛燒肉午間套餐 (估計 $${(COSTS.DINING.馬喰一代午餐 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=燒肉+飛驒牛一頭家+馬喰一代+名古屋WEST" },
+            { name: "味藏天國", type: "main", city: "takayama", desc: `JA直營飛驒牛燒肉 (估計 $${(COSTS.DINING.味藏天國 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" },
+            { name: "飛驒牛專賣店「丸明」", type: "main", city: "takayama", desc: `飛驒牛排/壽喜燒 (估計 $${(COSTS.DINING.高山牛排 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=丸明+高山" },
+            { name: "鍛治橋拉麵", type: "main", city: "takayama", desc: `高山拉麵專賣店 (估計 $${(COSTS.DINING.高山鍛治橋拉麵 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=鍛治橋拉麵" },
+            { name: "重兵衛", type: "sweet", city: "takayama", desc: `飛驒牛握壽司 (估計 $${(COSTS.DINING.飛驒牛握壽司_重兵衛 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Jyubei+Takayama" },
+            { name: "石川屋本舖", type: "sweet", city: "kanazawa", desc: `KAICHIN 琥珀糖 (估計 $${(COSTS.DINING.石川屋本舖_點心 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Ishikawaya+Honpo" },
+            { name: "手打蕎麥麵 YABUDA", type: "main", city: "kanazawa", desc: `金澤車站附近蕎麥麵專賣店 (估計 $${(COSTS.DINING.金澤蕎麥麵 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=手打蕎麥麵+兼六園+YABUDA" },
+            { name: "近江町食堂", type: "main", city: "kanazawa", desc: `近江町市場海鮮丼 (估計 $${(COSTS.DINING.金澤海鮮井近江町 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=近江町食堂" },
+            { name: "關東煮「赤玉本店」", type: "main", city: "kanazawa", desc: `金澤特色關東煮專賣店 (估計 $${(COSTS.DINING.金澤關東煮赤玉本店 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=關東煮+赤玉本店+金澤" }
+        ];
+
+        // Helper function to calculate total estimated costs
+        function calculateTotalBudget() {
+            // 1. 住宿 (TWD, Group Total)
+            const accommodationCost = COSTS.ACCOMMODATION;
+
+            // 2. 交通 (TWD, Group Total)
+            const transport1 = GROUP_SIZE * 2 * COSTS.TRANSPORT.NGO_NAGOYA * JPY_TWD_RATE; 
+            const transport2 = GROUP_SIZE * 1 * COSTS.TRANSPORT.NAGOYA_TAKAYAMA * JPY_TWD_RATE;
+            const transport3 = COSTS.TRANSPORT.TAKAYAMA_KANAZAWA_FIXED;
+            const transport4 = GROUP_SIZE * 1 * COSTS.TRANSPORT.KANAZAWA_NAGOYA * JPY_TWD_RATE;
+            const totalTransport = transport1 + transport2 + transport3 + transport4;
+
+            // 3. 餐飲 (TWD, Group Total) 
+            
+            const specifiedDiningTotalJPY = COSTS.DINING.熱田蓬萊軒 + COSTS.DINING.仙石すし本店 + COSTS.DINING.麵屋獅子丸 + COSTS.DINING.味藏天國 + COSTS.DINING.矢場味噌豬排 + COSTS.DINING.馬喰一代午餐 + COSTS.DINING.金澤關東煮赤玉本店 + COSTS.DINING.金澤海鮮井近江町 + COSTS.DINING.金澤蕎麥麵 + COSTS.DINING.高山牛排 + COSTS.DINING.高山鍛治橋拉麵 + COSTS.DINING.犬山城下町輕食 + COSTS.DINING.白川鄉簡餐;
+
+            const generalDiningJPY = (COSTS.DINING.GENERAL_MEAL_STANDARD * 4) + (COSTS.DINING.GENERAL_MEAL_LIGHT * 6) + COSTS.DINING.飛驒牛握壽司_重兵衛 + COSTS.DINING.高山林盛堂_點心 + COSTS.DINING.石川屋本舖_點心;
+            
+            const totalDining = GROUP_SIZE * (specifiedDiningTotalJPY + generalDiningJPY) * JPY_TWD_RATE;
+
+
+            // 4. 門票 (TWD, Group Total)
+            const totalEntryJPY = COSTS.ENTRY.犬山城 + COSTS.ENTRY.德川園 + COSTS.ENTRY.高山陣屋 + COSTS.ENTRY.飛驒之里 + COSTS.ENTRY.兼六園;
+            const totalEntry = GROUP_SIZE * totalEntryJPY * JPY_TWD_RATE;
+
+            return {
+                Accommodation: Math.round(accommodationCost),
+                Transport: Math.round(totalTransport),
+                Dining: Math.round(totalDining),
+                Entry: Math.round(totalEntry),
+                Total: Math.round(accommodationCost + totalTransport + totalDining + totalEntry)
+            };
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            renderFullItinerary();
+            renderRestaurants('all');
+            setupMobileMenu();
+            setupFilterButtons();
+        });
+
+        // FIXED: Improved mobile menu handling to prevent jumpy scrolling
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const links = document.querySelectorAll('.mobile-link');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+
+            // This section is crucial for fixing mobile scrolling issues
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetId = link.getAttribute('href');
+                    
+                    // Collapse menu first
+                    menu.classList.add('hidden');
+
+                    // Get target element
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Prevent default anchor jump (which causes jumping before scrolling)
+                        e.preventDefault(); 
+                        
+                        // Scroll to position manually with offset (64px is fixed nav height)
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 64, 
+                            behavior: 'smooth'
+                        });
+
+                        // Update hash without triggering another scroll event (for URL consistency)
+                        history.pushState(null, null, targetId);
+                    }
+                });
+            });
+        }
+
+        function initCharts() {
+            const budget = calculateTotalBudget();
+
+            // --- Chart 1: Total Budget Breakdown ---
+            const ctxBudget = document.getElementById('budgetChart').getContext('2d');
+            new Chart(ctxBudget, {
+                type: 'bar',
+                data: {
+                    labels: ['住宿 (9晚)', '交通 (長途)', '餐飲 (10天)', '門票 (景點)'],
+                    datasets: [{
+                        label: '費用估算 (TWD)',
+                        data: [budget.Accommodation, budget.Transport, budget.Dining, budget.Entry],
+                        backgroundColor: ['#14B8A6', '#3B82F6', '#F59E0B', '#EF4444'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: $${context.parsed.y.toLocaleString()} TWD`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, title: { display: true, text: '總費用 (TWD, 四人份)' } }
+                    }
+                }
+            });
+
+            // --- Chart 2: Travel Time ---
+            const ctxTime = document.getElementById('timeChart').getContext('2d');
+            new Chart(ctxTime, {
+                type: 'bar',
+                data: {
+                    labels: ['高雄-名古屋 (飛機)', '名古屋-高山 (JR特急)', '高山-金澤 (巴士+新幹線)', '金澤-名古屋 (JR特急)'],
+                    datasets: [{
+                        label: '預估耗時 (小時)',
+                        data: [4, 2.5, 4.5, 3], 
+                        backgroundColor: '#334155', /* Dark Slate */
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: '小時' } }
+                    }
+                }
+            });
+        }
+
+        // 3. Itinerary Rendering (Vertical Accordion)
+        function renderFullItinerary() {
+            const container = document.getElementById('full-itinerary-container');
+            container.innerHTML = itineraryData.map((day, index) => {
+                const dayHeader = `
+                    <div id="day-${day.day}" class="timeline-node card-bg-light p-6 shadow-xl border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-2xl group" onclick="toggleAccordion(${index})">
+                        <div class="flex flex-col cursor-pointer">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                    <span class="bg-teal-50 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day ${day.day}</span>
+                                    ${day.date} - ${day.title}
+                                </h3>
+                                <i id="icon-${index}" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
+                            </div>
+                        </div>
+                        <div id="content-${index}" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
+                            <!-- Timeline events will be inside here -->
+                            ${renderDayTimeline(day.events)}
+                        </div>
+                    </div>
+                `;
+                return dayHeader;
+            }).join('');
+        }
+        
+        function renderDayTimeline(events) {
+            let html = '<div class="relative pl-6 pt-4">';
+            html += '<div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-300 timeline-line"></div>';
+
+            html += events.map(event => {
+                let iconBg = 'bg-gray-200 text-[#334155]';
+                if(event.type === 'transport') iconBg = 'bg-blue-100 text-blue-600';
+                if(event.type === 'stay') iconBg = 'bg-yellow-100 text-yellow-600';
+                if(event.type === 'food') iconBg = 'bg-orange-100 text-orange-600';
+                if(event.type === 'spot') iconBg = 'bg-green-100 text-green-600';
+
+                const linkHtml = event.link 
+                    ? `<a href="${event.link}" target="_blank" class="text-[#14B8A6] hover:text-teal-600 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>`
+                    : '';
+
+                return `
+                    <div class="relative flex items-start mb-6 last:mb-0">
+                        <div class="flex-shrink-0 w-6 h-6 rounded-full ${iconBg} flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
+                            <i class="fa-solid ${event.icon} text-xs"></i>
+                        </div>
+                        <div class="ml-10 pt-0.5">
+                            <div class="flex items-center space-x-3 mb-1">
+                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">${event.time}</span>
+                                <h4 class="font-semibold text-gray-800">${event.title}</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">${event.desc}</p>
+                            ${linkHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            html += '</div>';
+            return html;
+        }
+
+        window.toggleAccordion = function(index) {
+            const content = document.getElementById(`content-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (content.classList.contains('hidden')) {
+                // Open accordion
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                // Close accordion
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        };
+
+        // 4. Restaurant Filter & Rendering
+        function setupFilterButtons() {
+            const filterBtns = document.querySelectorAll('#food .filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Update UI
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-[#14B8A6]', 'text-white', 'shadow-md');
+                        b.classList.add('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
+                    });
+                    e.target.classList.remove('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
+                    e.target.classList.add('bg-[#14B8A6]', 'text-white', 'shadow-md');
+
+                    // Filter logic
+                    const filter = e.target.getAttribute('data-filter');
+                    renderRestaurants(filter);
+                });
+            });
+        }
+
+        function renderRestaurants(filter) {
+            const container = document.getElementById('restaurant-grid');
+            const filtered = filter === 'all' 
+                ? restaurants 
+                : restaurants.filter(r => r.city === filter || r.type === filter);
+
+            container.innerHTML = filtered.map(r => {
+                let badgeColor = r.city === 'nagoya' ? 'bg-blue-100 text-blue-800' : (r.city === 'takayama' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800');
+                let cityLabel = r.city === 'nagoya' ? '名古屋' : (r.city === 'takayama' ? '高山' : '金澤');
+                let typeIcon = r.type === 'main' ? 'fa-utensils' : 'fa-cookie-bite';
+                
+                return `
+                <div class="card-bg-light rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full ${badgeColor}">${cityLabel}</span>
+                            <span class="text-gray-400"><i class="fa-solid ${typeIcon}"></i></span>
+                        </div>
+                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">${r.name}</h4>
+                        <p class="text-sm text-gray-600">${r.desc}</p>
+                    </div>
+                    <a href="${r.link}" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
+                        <i class="fa-solid fa-map-location-dot mr-1"></i> Google Maps 導航
+                    </a>
+                </div>
+                `;
+            }).join('');
+        }
+    </script>
+
+</body></html>

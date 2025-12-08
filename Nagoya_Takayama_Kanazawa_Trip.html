@@ -350,7 +350,7 @@
                 金澤蕎麥麵: 2000, // Day 8 Lunch
                 高山鍛治橋拉麵: 1000, // Day 5 Lunch
                 高山牛排: 4500, // Day 4 Dinner
-                犬山城下町輕食: 1500, // Day 2 Lunch
+                犬山城下町輕食: 1500, // Day 2 Lunch (Average for multiple snacks)
                 白川鄉簡餐: 1800, // Day 6 Lunch (Inaka Soba/Set)
                 FUMIYA_DINNER: 2500, // Day 1 Dinner (居酒屋標準餐費用)
                 // Snacks & Light Meals (Estimated JPY/person)
@@ -390,7 +390,7 @@
                 title: "名古屋歷史散策 (犬山城/德川園)", 
                 events: [
                 { time: "09:00", title: "犬山城 & 城下町", type: "spot", desc: `門票估計每人 $${(COSTS.ENTRY.犬山城 * JPY_TWD_RATE).toFixed(0)} TWD`, icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
-                { time: "12:30", title: "午餐: 犬山壽司店壽俵屋", type: "food", desc: `米包壽司/田樂 (估計每人 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=犬山壽司店壽俵屋" },
+                { time: "12:30", title: "午餐: 犬山城下町多樣小吃", type: "food", desc: `壽俵屋壽司、クシカツとなまる串炸、蘭丸串燒 (估計每人 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=犬山城下町+クシカツとなまる" },
                 { time: "15:00", title: "德川園", type: "spot", desc: `門票估計每人 $${(COSTS.ENTRY.德川園 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Tokugawaen" },
                 { time: "18:30", title: "晚餐: 麵屋獅子丸", type: "food", desc: `濃郁雞白湯拉麵 (估計每人 $${(COSTS.DINING.麵屋獅子丸 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" }
             ]},
@@ -498,7 +498,10 @@
             { name: "手打蕎麥麵 YABUDA", type: "main", city: "kanazawa", desc: `金澤車站附近蕎麥麵專賣店 (估計 $${(COSTS.DINING.金澤蕎麥麵 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=手打蕎麥麵+兼六園+YABUDA" },
             { name: "近江町食堂", type: "main", city: "kanazawa", desc: `近江町市場海鮮丼 (估計 $${(COSTS.DINING.金澤海鮮井近江町 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=近江町食堂" },
             { name: "關東煮「赤玉本店」", type: "main", city: "kanazawa", desc: `金澤特色關東煮專賣店 (估計 $${(COSTS.DINING.金澤關東煮赤玉本店 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=關東煮+赤玉本店+金澤" },
-            { name: "ふみ屋 錦店", type: "main", city: "nagoya", desc: `居酒屋餐點 (估計 $${(COSTS.DINING.FUMIYA_DINNER * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
+            { name: "ふみ屋 錦店", type: "main", city: "nagoya", desc: `居酒屋餐點 (估計 $${(COSTS.DINING.FUMIYA_DINNER * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" },
+            { name: "壽俵屋", type: "sweet", city: "nagoya", desc: `犬山城下町米包壽司/田樂 (估計 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=犬山壽司店壽俵屋" },
+            { name: "クシカツとなまる", type: "sweet", city: "nagoya", desc: `犬山城下町串炸 (估計 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=クシカツとなまる+犬山" },
+            { name: "蘭丸", type: "sweet", city: "nagoya", desc: `犬山城下町串燒 (估計 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=蘭丸+犬山" }
         ];
 
         // Helper function to calculate total estimated costs

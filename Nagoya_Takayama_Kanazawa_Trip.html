@@ -18,14 +18,14 @@
     
     <!-- Application Structure Plan:
         1. **Navigation**: Fixed top bar with smooth scrolling links. (Mobile navigation fixed)
-        2. **Dashboard**: Focused on Total Budget Breakdown (Bar Chart) and Travel Time (Bar Chart). NOW INCLUDES EXTERNAL MAP.
+        2. **Dashboard**: Focused on Total Budget Breakdown (Bar Chart) and Travel Time (Bar Chart). NOW INCLUDES EXTERNAL MAP PLACEHOLDER.
         3. **Continuous Itinerary**: Vertical, continuous list using accordion structure. All dining entries are explicitly detailed.
         4. **Gourmet Map**: Interactive card grid with city/type filters.
         5. **Logistics**: Split into Accommodation, Transport, and Entry Ticket Summary.
     -->
 
     <!-- Visualization & Content Choices:
-        1. **Travel Map**: Embedded as external IMG tag using the provided URL.
+        1. **Travel Map**: External placeholder image used for reliable display.
         2. **Total Budget Breakdown (Bar Chart)**: Summarizes total estimated costs (Accommodation, Transport, Dining, Entry) for the group.
         3. **Travel Time vs. Transport Type (Bar Chart)**: Compares major travel segments.
         4. **Timeline UI (Accordion/Vertical List)**: Custom HTML/Tailwind accordion.
@@ -352,7 +352,7 @@
                 高山牛排: 4500, // Day 4 Dinner
                 犬山城下町輕食: 1500, // Day 2 Lunch
                 白川鄉簡餐: 1800, // Day 6 Lunch (Inaka Soba/Set)
-                FUMIYA_DINNER: 2500, // Day 1 Dinner
+                FUMIYA_DINNER: 2500, // Day 1 Dinner (居酒屋標準餐費用)
                 // Snacks & Light Meals (Estimated JPY/person)
                 飛驒牛握壽司_重兵衛: 1000,
                 高山林盛堂_點心: 500,
@@ -382,7 +382,7 @@
                 { time: "18:50", title: "抵達名古屋中部機場", type: "transport", desc: "入境手續、領取行李", icon: "fa-passport" },
                 { time: "20:00", title: "搭乘名鐵前往市區", type: "transport", desc: `名鐵 μ-SKY (估計每人 $${(COSTS.TRANSPORT.NGO_NAGOYA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-train" },
                 { time: "21:00", title: "飯店 Check-in", type: "stay", desc: "名古屋市筒井町 STAY", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Nagoya+Tsutsuicho+STAY" },
-                { time: "22:00", title: "晚餐: ふみ屋 錦店", type: "food", desc: `日式定食/麵食 (估計每人 $${(COSTS.DINING.FUMIYA_DINNER * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
+                { time: "22:00", title: "晚餐: ふみ屋 錦店", type: "food", desc: `居酒屋餐點 (估計每人 $${(COSTS.DINING.FUMIYA_DINNER * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
             ]},
             { 
                 day: 2, 
@@ -497,7 +497,8 @@
             { name: "石川屋本舖", type: "sweet", city: "kanazawa", desc: `KAICHIN 琥珀糖 (估計 $${(COSTS.DINING.石川屋本舖_點心 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Ishikawaya+Honpo" },
             { name: "手打蕎麥麵 YABUDA", type: "main", city: "kanazawa", desc: `金澤車站附近蕎麥麵專賣店 (估計 $${(COSTS.DINING.金澤蕎麥麵 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=手打蕎麥麵+兼六園+YABUDA" },
             { name: "近江町食堂", type: "main", city: "kanazawa", desc: `近江町市場海鮮丼 (估計 $${(COSTS.DINING.金澤海鮮井近江町 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=近江町食堂" },
-            { name: "關東煮「赤玉本店」", type: "main", city: "kanazawa", desc: `金澤特色關東煮專賣店 (估計 $${(COSTS.DINING.金澤關東煮赤玉本店 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=關東煮+赤玉本店+金澤" }
+            { name: "關東煮「赤玉本店」", type: "main", city: "kanazawa", desc: `金澤特色關東煮專賣店 (估計 $${(COSTS.DINING.金澤關東煮赤玉本店 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=關東煮+赤玉本店+金澤" },
+            { name: "ふみ屋 錦店", type: "main", city: "nagoya", desc: `居酒屋餐點 (估計 $${(COSTS.DINING.FUMIYA_DINNER * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
         ];
 
         // Helper function to calculate total estimated costs

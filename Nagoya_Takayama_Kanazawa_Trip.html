@@ -1,7 +1,7 @@
 <html lang="zh-TW"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>冬日北陸之旅 | 現代旅遊規劃儀表板</title>
+    <title>冬日北陸四城之旅 | 互動式旅遊規劃</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
@@ -11,40 +11,18 @@
     <!-- Google Fonts: Noto Sans TC -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
 
-    <!-- Chosen Palette: Modern Teal & Slate (清爽藍灰調) -->
-    <!-- Primary Accent: #14B8A6 (Teal, for highlights), Background: #F8FAFC (Super Light Gray), Text: #334155 (Slate) -->
-    
-    <!-- Application Structure Plan:
-        1. **Navigation**: Fixed top bar with smooth scrolling links. (Mobile navigation fixed)
-        2. **Dashboard**: Focused on Total Budget Breakdown (Bar Chart) and Travel Time (Bar Chart). NOW INCLUDES EXTERNAL MAP.
-        3. **Continuous Itinerary**: Vertical, continuous list using accordion structure. All dining entries are explicitly detailed.
-        4. **Gourmet Map**: Interactive card grid with city/type filters.
-        5. **Logistics**: Split into Accommodation, Transport, and Entry Ticket Summary.
-    -->
-
-    <!-- Visualization & Content Choices:
-        1. **Travel Map**: Embedded as external IMG tag using the provided URL.
-        2. **Total Budget Breakdown (Bar Chart)**: Summarizes total estimated costs (Accommodation, Transport, Dining, Entry) for the group.
-        3. **Travel Time vs. Transport Type (Bar Chart)**: Compares major travel segments.
-        4. **Timeline UI (Accordion/Vertical List)**: Custom HTML/Tailwind accordion.
-        5. **Interaction**: Smooth scroll navigation, filter buttons for food, and accordion toggle for daily events.
-    -->
-
-    <!-- CONFIRMATION: NO SVG graphics used (FontAwesome icons used instead). NO Mermaid JS used. -->
-
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #F8FAFC; /* Light Gray */
             color: #334155; /* Slate */
         }
-        .theme-teal { color: #14B8A6; } /* Teal */
+        .theme-teal { color: #14B8A6; }
         .bg-theme-teal { background-color: #14B8A6; }
+        .border-theme-teal { border-color: #14B8A6; }
         
-        /* Smooth scrolling */
         html { scroll-behavior: smooth; }
         
-        /* Chart Container Strict Styling */
         .chart-container {
             position: relative;
             width: 100%;
@@ -54,14 +32,12 @@
             max-height: 300px;
         }
 
-        /* Card Background Styling for professional look */
         .card-bg-light {
             background-color: #FFFFFF;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Timeline Node Styles */
         .timeline-node {
             transition: all 0.3s ease-in-out;
             cursor: pointer;
@@ -70,13 +46,23 @@
             z-index: 0;
         }
 
-        /* Map Image Container Styling for responsiveness */
+        /* Choice Card Styles */
+        .choice-card {
+            border: 2px solid #E2E8F0;
+            transition: all 0.2s;
+        }
+        .choice-card.selected {
+            border-color: #14B8A6;
+            background-color: #F0FDFA;
+            box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+        }
+        
         .map-wrapper {
             margin-bottom: 2.5rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             border-radius: 0.75rem;
             overflow: hidden;
-            background-color: #ffffff; /* Ensure background is white for map */
+            background-color: #ffffff;
         }
         .map-wrapper img {
             width: 100%;
@@ -93,7 +79,7 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center">
                     <i class="fa-solid fa-map-marked-alt text-2xl theme-teal mr-2"></i>
-                    <span class="font-bold text-xl tracking-wide text-gray-700">冬日北陸之旅</span>
+                    <span class="font-bold text-xl tracking-wide text-gray-700">冬日北陸四城之旅</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#dashboard" class="text-gray-600 hover:text-[#14B8A6] transition font-medium">總覽數據</a>
@@ -101,7 +87,6 @@
                     <a href="#food" class="text-gray-600 hover:text-[#14B8A6] transition font-medium">美食地圖</a>
                     <a href="#logistics" class="text-gray-600 hover:text-[#14B8A6] transition font-medium">住宿交通</a>
                 </div>
-                <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-600 focus:outline-none">
                         <i class="fa-solid fa-bars text-xl"></i>
@@ -109,7 +94,6 @@
                 </div>
             </div>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 flex flex-col space-y-3 shadow-lg">
             <a href="#dashboard" class="mobile-link block px-3 py-2 rounded-md text-base font-medium hover:bg-teal-50 text-gray-700">總覽數據</a>
             <a href="#itinerary" class="mobile-link block px-3 py-2 rounded-md text-base font-medium hover:bg-teal-50 text-gray-700">每日行程</a>
@@ -121,7 +105,7 @@
     <!-- Hero Section -->
     <header class="relative bg-white shadow-inner">
         <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl font-extrabold text-[#334155] tracking-tight mb-3">名古屋．高山．金澤</h1>
+            <h1 class="text-4xl font-extrabold text-[#334155] tracking-tight mb-3">名古屋．高山．富山．金澤</h1>
             <p class="text-xl theme-teal font-semibold mb-6">10天9夜 冬日北陸之旅 (2025/12/22 ~ 12/31)</p>
             <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
                 <span class="bg-teal-50 px-4 py-1.5 rounded-full font-medium"><i class="fa-solid fa-users mr-2 theme-teal"></i>4位成員 (聖叡、淑琪、嬸嬸、媽媽)</span>
@@ -133,19 +117,17 @@
     <!-- Dashboard Section -->
     <section id="dashboard" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- 地圖標題 -->
         <div class="mb-6">
-             <h3 class="text-2xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">冬日北陸之旅 10日遊地圖</h3>
+             <h3 class="text-2xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">北陸四城 10日遊地圖</h3>
         </div>
 
-        <!-- 嵌入地圖圖像 (使用您提供的外部連結) -->
         <div class="map-wrapper">
-            <img src="https://i.meee.com.tw/FadENbA.png" alt="冬日北陸之旅 10日遊地圖" class="">
+            <img src="https://i.meee.com.tw/FadENbA.png" alt="冬日北陸之旅地圖" class="">
         </div>
 
         <div class="mb-10">
             <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">行程總覽與費用預算 (TWD)</h2>
-            <p class="mt-3 text-gray-500">此區塊提供四位成員總計的費用估算，以及主要長途移動的時間成本分析。 (匯率 JPY ≈ 0.20 TWD)</p>
+            <p class="mt-3 text-gray-500">此圖表為動態互動式，當您在行程中切換不同餐廳選項時，總預算會即時更新。</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -156,7 +138,7 @@
                     <canvas id="budgetChart"></canvas>
                 </div>
                 <div class="mt-6 text-center text-sm text-gray-500 bg-teal-50 p-3 rounded-lg">
-                    <p><i class="fa-solid fa-coins mr-1 theme-teal"></i> 預估總花費約 **$107,311 TWD** (不含機票與個人購物)。</p>
+                    <p id="total-budget-display"><i class="fa-solid fa-coins mr-1 theme-teal"></i> 計算中...</p>
                 </div>
             </div>
 
@@ -167,937 +149,23 @@
                     <canvas id="timeChart"></canvas>
                 </div>
                 <div class="mt-6 text-center text-sm text-gray-500 bg-teal-50 p-3 rounded-lg">
-                    <p><i class="fa-solid fa-clock mr-1 theme-teal"></i> 最長的移動日 (高山至金澤) 需預留約 4.5 小時。</p>
+                    <p><i class="fa-solid fa-clock mr-1 theme-teal"></i> 最長的移動日 (白川鄉轉乘日) 需注意班次銜接。</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Itinerary Section (Full Vertical List) -->
+    <!-- Itinerary Section -->
     <section id="itinerary" class="py-16 bg-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">每日行程精華</h2>
-                <p class="mt-3 text-gray-500">點擊任一日的標題可展開或收合詳細的時程與建議路線。所有景點均附有 Google Maps 連結。</p>
+                <p class="mt-3 text-gray-500">Day 3 與 Day 4 包含互動式餐廳選擇，點擊選項可即時更新行程與預算。</p>
             </div>
 
             <div id="full-itinerary-container" class="space-y-6">
-                    <div id="day-1" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(0)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 1</span>
-                                12/22 (一) - 抵達名古屋
-                            </h3>
-                            <i id="icon-0" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-0" class="mt-4 overflow-hidden transition-all duration-500 ease-in-out hidden">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-plane text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">14:50</span>
-                                <h4 class="font-semibold text-gray-800">高雄起飛</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">台灣虎航 IT268</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-passport text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">18:50</span>
-                                <h4 class="font-semibold text-gray-800">抵達名古屋中部機場</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">入境手續、領取行李</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-train text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">20:00</span>
-                                <h4 class="font-semibold text-gray-800">搭乘名鐵前往市區</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">名鐵 μ-SKY (估計每人 $286 TWD)</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bed text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">21:00</span>
-                                <h4 class="font-semibold text-gray-800">飯店 Check-in</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">名古屋市筒井町 STAY</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Nagoya+Tsutsuicho+STAY" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">22:00</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: ふみ屋 錦店</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">居酒屋餐點 (估計每人 $500 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=ふみ屋+錦店+名古屋" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-2" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(1)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 2</span>
-                                12/23 (二) - 名古屋特色早餐與古城巡禮
-                            </h3>
-                            <i id="icon-1" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-1" class="mt-4 overflow-hidden transition-all duration-500 ease-in-out hidden">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-mug-hot text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">08:00</span>
-                                <h4 class="font-semibold text-gray-800">早餐: コーヒーハウス かこ 花車本店</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">名古屋特色小倉吐司 (估計每人 $200 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=コーヒーハウス+かこ+花車本店" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-chess-rook text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:30</span>
-                                <h4 class="font-semibold text-gray-800">犬山城 &amp; 城下町</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">門票估計每人 $110 TWD</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Inuyama+Castle" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bowl-food text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">12:30</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 犬山城下町多樣小吃</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">壽俵屋壽司、クシカツとなまる串炸、蘭丸串燒 (估計每人 $300 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=犬山城下町+クシカツとなまる" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-tree text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">15:00</span>
-                                <h4 class="font-semibold text-gray-800">德川園</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">門票估計每人 $60 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Tokugawaen" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bowl-food text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">18:30</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: 麵屋獅子丸</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">濃郁雞白湯拉麵 (估計每人 $320 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Menya+Shishimaru" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-3" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(2)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 3</span>
-                                12/24 (三) - 熱田神宮 &amp; 前往高山
-                            </h3>
-                            <i id="icon-2" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-2" class="mt-4 overflow-hidden transition-all duration-500 ease-in-out hidden">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-torii-gate text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:00</span>
-                                <h4 class="font-semibold text-gray-800">熱田神宮</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">莊嚴參拜 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Atsuta+Jingu" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">12:00</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 熱田蓬萊軒</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">鰻魚飯三吃 (估計每人 $920 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Atsuta+Houraiken" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-train text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">14:30</span>
-                                <h4 class="font-semibold text-gray-800">名古屋車站移動</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">搭乘 JR 飛驒特急 (估計每人 $1122 TWD)</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bed text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">17:00</span>
-                                <h4 class="font-semibold text-gray-800">抵達高山 &amp; Check-in</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">HOTEL AMANEK Hida Takayama</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=HOTEL+AMANEK+Hida+Takayama" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-fire text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">19:30</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: 味藏天國</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">JA直營飛驒牛燒肉 (估計每人 $1100 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Ajikura+Tengoku" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-4" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(3)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 4</span>
-                                12/25 (四) - 高山朝市、老街與晚餐選擇
-                            </h3>
-                            <i id="icon-3" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-3" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-carrot text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">08:00</span>
-                                <h4 class="font-semibold text-gray-800">宮川朝市</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">逛早市、買農產品 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Miyagawa+Morning+Market" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-mug-hot text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">08:45</span>
-                                <h4 class="font-semibold text-gray-800">コマコーヒー (Koma Coffee)</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">特色餅乾咖啡 (估計每人 $160 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-cookie-bite text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:15</span>
-                                <h4 class="font-semibold text-gray-800">たこ焼きさごう (Takoyaki Sago)</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">美味章魚燒 (估計每人 $100 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-shopping-bag text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:45</span>
-                                <h4 class="font-semibold text-gray-800">購買 アンデルセン (Andersen) 隔日早餐</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">購買可頌等麵包 (估計每人 $160 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=日本〒506-0841+Gifu,+Takayama,+Shimosannomachi,+２３" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-cookie-bite text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">10:15</span>
-                                <h4 class="font-semibold text-gray-800">高山林盛堂</h4>
-                            </div>
-                            <!-- 已修正描述：強調為宮川朝市周邊的特色點心 -->
-                            <p class="text-sm text-gray-500">宮川朝市周邊特產/點心: おわら玉天 (估計每人 $100 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Rinseido+Takayama" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">10:45</span>
-                                <h4 class="font-semibold text-gray-800">飛驒牛握壽司「重兵衛」</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">老街特色點心 (估計每人 $200 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Jyubei+Takayama" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-store text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">11:15</span>
-                                <h4 class="font-semibold text-gray-800">飛驒高山老街 (三町通) 漫步</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">開始逛老街主街區 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Takayama+Old+Town" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bowl-food text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">12:30</span>
-                                <h4 class="font-semibold text-gray-800">午餐: さんまち (Sanmachi)</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">在地高山拉麵 (估計每人 $240 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=106-3+Kamisannomachi,+Takayama,+Gifu+506-0846+日本" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-landmark text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">14:30</span>
-                                <h4 class="font-semibold text-gray-800">高山陣屋</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">江戶時代官府 (門票估計每人 $88 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Takayama+Jinya" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">18:00</span>
-                                <h4 class="font-semibold text-gray-800">晚餐選擇 (二選一)</h4>
-                            </div>
-                            <p class="text-sm text-gray-600 font-bold mb-1"><i class="fa-solid fa-circle-dot mr-1 text-red-500"></i> 選項 1: えび八 (海老ハ)</p>
-                            <p class="text-xs text-gray-500 pl-4">現炸天婦羅 (估計每人 $600 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=41+Aioimachi,+Takayama,+Gifu+506-0014+日本" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block pl-4"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-
-                            <p class="text-sm text-gray-600 font-bold mt-2 mb-1"><i class="fa-solid fa-circle-dot mr-1 text-blue-500"></i> 選項 2: 寿美久</p>
-                            <p class="text-xs text-gray-500 pl-4">手打蕎麥麵 (估計每人 $600 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=45+Uramachi,+Takayama,+Gifu+506-0013+日本" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block pl-4"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-5" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(4)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 5</span>
-                                12/26 (五) - 合掌造聚落體驗
-                            </h3>
-                            <i id="icon-4" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-4" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-mug-hot text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">08:00</span>
-                                <h4 class="font-semibold text-gray-800">早餐: アンデルセン (Andersen)</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">享用前一日於宮川朝市周邊購買的麵包 (估計每人 $160 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=日本〒506-0841+Gifu,+Takayama,+Shimosannomachi,+２３" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                    
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-mountain-sun text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:30</span>
-                                <h4 class="font-semibold text-gray-800">飛驒之里 (飛騨の里)</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">合掌造民家園 (門票估計每人 $140 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Hida+Folk+Village" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">12:30</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 鍛治橋拉麵</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">在地高山拉麵 (估計每人 $200 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=鍛治橋拉麵" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-torii-gate text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">15:00</span>
-                                <h4 class="font-semibold text-gray-800">櫻山八幡宮</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">欣賞高山祭屋台 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Sakurayama+Hachimangu" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-hotel text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">18:30</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: 鄉土料理店「京屋」</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">品嚐朴葉味噌燒等特色和食 (估計每人 $500 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=京屋+高山" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-6" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(5)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 6</span>
-                                12/27 (六) - 白川鄉 &amp; 跨城至金澤
-                            </h3>
-                            <i id="icon-5" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-5" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bus text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">12:10</span>
-                                <h4 class="font-semibold text-gray-800">高山 → 白川鄉 → 金澤</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">長途交通日 (4人總計 $4,023 TWD)</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-snowflake text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">13:00</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 白川鄉「落人」茶屋</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">品嚐合掌村簡餐/蕎麥麵 (估計每人 $360 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=落人茶屋+白川鄉" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bed text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">19:40</span>
-                                <h4 class="font-semibold text-gray-800">Check-in</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">清蓮 Le Lotus Bleu (金澤)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Le+Lotus+Bleu+Kanazawa" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">20:30</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: 金澤站「黑百合」餐廳</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">金澤站內特色料理 (估計每人 $500 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=黑百合+金澤" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-7" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(6)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 7</span>
-                                12/28 (日) - 金澤經典名所
-                            </h3>
-                            <i id="icon-6" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-6" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-tree text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:00</span>
-                                <h4 class="font-semibold text-gray-800">兼六園</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">日本三大名園 (門票估計每人 $64 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Kenrokuen" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-fan text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">11:30</span>
-                                <h4 class="font-semibold text-gray-800">東茶屋街 &amp; 主計町茶屋街</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">金箔冰淇淋、懷舊藝妓街景 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Higashi+Chaya+District" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-fish text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">13:00</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 近江町市場海鮮丼</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">市場內「近江町食堂」或「井之彌」 (估計每人 $600 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=近江町食堂" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-gift text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">15:30</span>
-                                <h4 class="font-semibold text-gray-800">石川屋本舖</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">點心時間: KAICHIN 琥珀糖 (估計每人 $100 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Ishikawaya+Honpo" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-mug-hot text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">18:30</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: 關東煮「赤玉本店」</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">金澤特色關東煮專賣店 (估計每人 $800 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=關東煮+赤玉本店+金澤" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-8" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(7)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 8</span>
-                                12/29 (一) - 金澤武士與返程
-                            </h3>
-                            <i id="icon-7" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-7" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-house-chimney-user text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:30</span>
-                                <h4 class="font-semibold text-gray-800">長町武家屋敷跡</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">古老的土牆與武士住宅區 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Nagamachi+Bukeyashiki" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-torii-gate text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">11:00</span>
-                                <h4 class="font-semibold text-gray-800">尾山神社</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">和洋折衷的特色神門 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Oyama+Shrine" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bowl-food text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">13:00</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 手打蕎麥麵 YABUDA</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">金澤車站附近蕎麥麵專賣店 (估計每人 $400 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=手打蕎麥麵+兼六園+YABUDA" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-train text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">15:00</span>
-                                <h4 class="font-semibold text-gray-800">金澤 → 名古屋</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">JR 特急 Shirasagi 號 (估計每人 $1970 TWD)</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bed text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">18:00</span>
-                                <h4 class="font-semibold text-gray-800">抵達名古屋 &amp; Check-in</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">Compass Hotel Nagoya</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Compass+Hotel+Nagoya" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">20:00</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: 矢場味噌豬排</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">名古屋名物味噌豬排 (估計每人 $500 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=矢場味噌豬排+名古屋" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-9" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(8)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 9</span>
-                                12/30 (二) - 名古屋市區與購物
-                            </h3>
-                            <i id="icon-8" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-8" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-coffee text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:00</span>
-                                <h4 class="font-semibold text-gray-800">早餐</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">享用飯店簡易早餐</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-store text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">10:30</span>
-                                <h4 class="font-semibold text-gray-800">大須觀音 &amp; 商店街</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">逛街、參拜、購買雜貨 (免門票)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Osu+Kannon" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-fire text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">13:00</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 最飛びヒレ家 馬喰一代 名古屋EAST</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">飛驒牛燒肉午間套餐 (估計每人 $700 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=最飛びヒレ家+馬喰一代+名古屋EAST" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-bag-shopping text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">14:30</span>
-                                <h4 class="font-semibold text-gray-800">名站周邊購物</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">高島屋、電器行採購伴手禮 (自由活動)</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-fish text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">18:30</span>
-                                <h4 class="font-semibold text-gray-800">晚餐: 仙石すし 本店</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">超厚切高CP值壽司 (估計每人 $500 TWD)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Sengoku+Sushi+Honten" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps 導航</a>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                
-                    <div id="day-10" class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group" onclick="toggleAccordion(9)">
-                        <div class="flex justify-between items-center cursor-pointer">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day 10</span>
-                                12/31 (三) - 回程
-                            </h3>
-                            <i id="icon-9" class="fa-solid fa-chevron-down text-gray-500 transition duration-300"></i>
-                        </div>
-                        <div id="content-9" class="mt-4 hidden overflow-hidden transition-all duration-500 ease-in-out">
-                            <!-- Timeline events will be inside here -->
-                            <div class="relative pl-6 pt-4"><div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-suitcase text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">09:00</span>
-                                <h4 class="font-semibold text-gray-800">早餐 &amp; 最後整理</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">飯店簡易早餐，整理行李</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-utensils text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">12:00</span>
-                                <h4 class="font-semibold text-gray-800">午餐: 名古屋車站周邊</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">在名站周邊享用最後一餐 (估計每人 $300 TWD)</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-train text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">15:30</span>
-                                <h4 class="font-semibold text-gray-800">前往機場</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">搭乘名鐵 μ-SKY (估計每人 $286 TWD)</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-plane-departure text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">17:30</span>
-                                <h4 class="font-semibold text-gray-800">機場 Check-in</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">辦理登機手續及免稅店購物</p>
-                            
-                        </div>
-                    </div>
-                
-                    <div class="relative flex items-start mb-6 last:mb-0">
-                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
-                            <i class="fa-solid fa-plane text-xs"></i>
-                        </div>
-                        <div class="ml-10 pt-0.5">
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">19:40</span>
-                                <h4 class="font-semibold text-gray-800">搭機返台</h4>
-                            </div>
-                            <p class="text-sm text-gray-500">台灣虎航 IT269 / 19:40 NGO → 22:35 KHH</p>
-                            
-                        </div>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Javascript will populate this container -->
+            </div>
         </div>
     </section>
 
@@ -1105,366 +173,25 @@
     <section id="food" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-10">
             <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4">美食口袋名單與地圖</h2>
-            <p class="mt-3 text-gray-500">篩選您想找的城市或美食類別，輕鬆找到附近的好味道！</p>
+            <p class="mt-3 text-gray-500">已更新富山推薦美食 (麵家いろは、白蝦亭)，點擊下方按鈕篩選。</p>
         </div>
 
-        <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-10 justify-center">
             <button class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold transition bg-[#14B8A6] text-white shadow-md hover:bg-teal-600" data-filter="all">全部美食</button>
             <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="nagoya">名古屋</button>
             <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="takayama">高山</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="toyama">富山</button>
             <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="kanazawa">金澤</button>
             <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="main">正餐/主食</button>
             <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="sweet">甜點/小吃</button>
         </div>
 
-        <!-- Restaurant Grid -->
         <div id="restaurant-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-mug-hot"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">コーヒーハウス かこ 花車本店</h4>
-                        <p class="text-sm text-gray-600">名古屋特色小倉吐司 (估計 $200 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=コーヒーハウス+かこ+花車本店" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">熱田蓬萊軒</h4>
-                        <p class="text-sm text-gray-600">名古屋名物 鰻魚飯三吃 (估計 $920 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Atsuta+Houraiken" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div class="">
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">仙石すし 本店</h4>
-                        <p class="text-sm text-gray-600">超厚切壽司，高CP值 (估計 $500 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Sengoku+Sushi+Honten" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">麵屋獅子丸</h4>
-                        <p class="text-sm text-gray-600">濃郁雞白湯拉麵 (估計 $320 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Menya+Shishimaru" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">矢場味噌豬排</h4>
-                        <p class="text-sm text-gray-600">名古屋名物味噌豬排 (估計 $500 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=矢場味噌豬排+名古屋" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">最飛びヒレ家 馬喰一代 名古屋EAST</h4>
-                        <p class="text-sm text-gray-600">飛驒牛燒肉午間套餐 (估計 $700 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=最飛びヒレ家+馬喰一代+名古屋EAST" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">ふみ屋 錦店</h4>
-                        <p class="text-sm text-gray-600">居酒屋餐點 (估計 $500 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=ふみ屋+錦店+名古屋" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-cookie-bite"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">壽俵屋</h4>
-                        <p class="text-sm text-gray-600">犬山城下町米包壽司/田樂 (估計 $300 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=犬山壽司店壽俵屋" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-cookie-bite"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">クシカツとなまる</h4>
-                        <p class="text-sm text-gray-600">犬山城下町串炸 (估計 $300 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=クシカツとなまる+犬山" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-800">名古屋</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-cookie-bite"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">蘭丸</h4>
-                        <p class="text-sm text-gray-600">犬山城下町串燒 (估計 $300 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=蘭丸+犬山" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <!-- 新增：高山 - 朝市小吃 1 -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-mug-hot"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">コマコーヒー (Koma Coffee)</h4>
-                        <p class="text-sm text-gray-600">特色餅乾咖啡，朝市周邊 (估計 $160 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-
-                <!-- 新增：高山 - 朝市小吃 2 -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-cookie-bite"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">たこ焼きさごう (Takoyaki Sago)</h4>
-                        <p class="text-sm text-gray-600">美味章魚燒，朝市周邊 (估計 $100 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-
-                <!-- 新增：高山 - 早餐/點心 (改到Day 5早餐) -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-bread-slice"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">アンデルセン (Andersen)</h4>
-                        <p class="text-sm text-gray-600">特色可頌，適合隔日早餐 (估計 $160 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=日本〒506-0841+Gifu,+Takayama,+Shimosannomachi,+２３" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-
-                <!-- 新增：高山 - 午餐拉麵 -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-bowl-food"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">さんまち (Sanmachi)</h4>
-                        <p class="text-sm text-gray-600">在地高山拉麵 (估計 $240 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=106-3+Kamisannomachi,+Takayama,+Gifu+506-0846+日本" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-
-                <!-- 新增：高山 - 晚餐選擇 1 (えび八) -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-shrimp"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">えび八 (海老ハ)</h4>
-                        <p class="text-sm text-gray-600">現炸海鮮天婦羅 (估計 $600 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=41+Aioimachi,+Takayama,+Gifu+506-0014+日本" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-
-                <!-- 新增：高山 - 晚餐選擇 2 (寿美久) -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-bowl-food"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">寿美久</h4>
-                        <p class="text-sm text-gray-600">手打蕎麥麵專賣店 (估計 $600 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=45+Uramachi,+Takayama,+Gifu+506-0013+日本" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">味藏天國</h4>
-                        <p class="text-sm text-gray-600">JA直營飛驒牛燒肉 (估計 $1100 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Ajikura+Tengoku" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">飛驒牛專賣店「丸明」</h4>
-                        <p class="text-sm text-gray-600">飛驒牛排/壽喜燒 (估計 $900 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=丸明+高山" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">鍛治橋拉麵</h4>
-                        <p class="text-sm text-gray-600">高山拉麵專賣店 (估計 $200 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=鍛治橋拉麵" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-cookie-bite"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">重兵衛</h4>
-                        <p class="text-sm text-gray-600">飛驒牛握壽司 (估計 $200 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Jyubei+Takayama" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">高山</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-cookie-bite"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">高山林盛堂</h4>
-                        <p class="text-sm text-gray-600">おわら玉天 (點心估計 $100 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Rinseido+Takayama" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-800">金澤</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-cookie-bite"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">石川屋本舖</h4>
-                        <p class="text-sm text-gray-600">KAICHIN 琥珀糖 (估計 $100 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Ishikawaya+Honpo" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-800">金澤</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">近江町食堂</h4>
-                        <p class="text-sm text-gray-600">近江町市場海鮮丼 (估計 $600 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=近江町食堂" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-800">金澤</span>
-                            <span class="text-gray-400"><i class="fa-solid fa-utensils"></i></span>
-                        </div>
-                        <h4 class="font-extrabold text-xl text-gray-800 mb-2">關東煮「赤玉本店」</h4>
-                        <p class="text-sm text-gray-600">金澤特色關東煮專賣店 (估計 $800 TWD/人)</p>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=關東煮+赤玉本店+金澤" target="_blank" class="mt-5 text-center block w-full py-2 bg-teal-50 hover:bg-teal-100 text-[#14B8A6] text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> 立即導航
-                    </a>
-                </div>
-                </div>
+            <!-- Javascript will populate this -->
+        </div>
     </section>
 
-    <!-- Logistics Section (Accommodation & Transport) -->
+    <!-- Logistics Section -->
     <section id="logistics" class="py-16 bg-[#F0F4F8]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -1473,36 +200,35 @@
                 <div class="lg:col-span-1">
                     <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4 mb-8">住宿資訊 (9晚, TWD)</h2>
                     <div class="space-y-6">
-                        <!-- Hotel 1 -->
                         <div class="card-bg-light p-6 shadow-md border border-l-8 border-yellow-500">
                             <h3 class="font-extrabold text-xl text-gray-800 mb-1">名古屋市筒井町 STAY</h3>
                             <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/22-24 (2晚)</p>
                             <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $13,019</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Nagoya+Tsutsuicho+STAY" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
                         </div>
 
-                        <!-- Hotel 2 -->
                         <div class="card-bg-light p-6 shadow-md border border-l-8 border-green-600">
                             <h3 class="font-extrabold text-xl text-gray-800 mb-1">HOTEL AMANEK Hida Takayama</h3>
-                            <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/24-27 (3晚)</p>
-                            <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $12,754</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=HOTEL+AMANEK+Hida+Takayama" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
+                            <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/24-26 (2晚)</p>
+                            <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $8,502</p>
                         </div>
 
-                        <!-- Hotel 3 -->
+                        <div class="card-bg-light p-6 shadow-md border border-l-8 border-blue-600">
+                            <h3 class="font-extrabold text-xl text-gray-800 mb-1">ホテルエノエ富山 (Hotel Enoe)</h3>
+                            <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/26-27 (1晚)</p>
+                            <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 預估: $3,500</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=6-1+Aramachi,+Toyama,+930-0028" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
+                        </div>
+
                         <div class="card-bg-light p-6 shadow-md border border-l-8 border-indigo-600">
                             <h3 class="font-extrabold text-xl text-gray-800 mb-1">清蓮 Le Lotus Bleu</h3>
                             <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/27-29 (2晚)</p>
                             <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $12,527</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Le+Lotus+Bleu+Kanazawa" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
                         </div>
                         
-                        <!-- Hotel 4 -->
                         <div class="card-bg-light p-6 shadow-md border border-l-8 border-yellow-500">
                             <h3 class="font-extrabold text-xl text-gray-800 mb-1">Compass Hotel Nagoya</h3>
                             <p class="text-sm text-gray-600 mb-2"><i class="fa-solid fa-calendar-alt mr-1"></i> 12/29-31 (2晚)</p>
                             <p class="text-sm text-gray-500 font-bold"><i class="fa-solid fa-sack-dollar mr-1"></i> 總花費: $11,154</p>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Compass+Hotel+Nagoya" target="_blank" class="text-blue-500 text-sm font-medium mt-3 inline-block hover:underline">查看地圖 <i class="fa-solid fa-external-link-alt text-xs"></i></a>
                         </div>
                     </div>
                 </div>
@@ -1510,57 +236,55 @@
                 <!-- Col 2: Transport -->
                 <div class="lg:col-span-1">
                     <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4 mb-8">關鍵長途交通接駁</h2>
-                    <p class="text-sm text-gray-500 mb-4 font-semibold">費用估算為單人單程 (除非另有標註)</p>
                     <ul class="space-y-4 text-gray-700">
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-red-500">
                             <p class="font-bold">NGO ⇋ 名古屋市區</p>
-                            <p class="text-sm text-gray-600">名鐵特急/μ-SKY: **1,430 JPY** (~ $286 TWD)</p>
+                            <p class="text-sm text-gray-600">名鐵特急/μ-SKY: ~ $286 TWD</p>
                         </li>
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-orange-500">
                             <p class="font-bold">名古屋 ⇋ 高山</p>
-                            <p class="text-sm text-gray-600">JR 飛驒特急: **5,610 JPY** (~ $1,122 TWD)</p>
-                        </li>
-                        <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-yellow-500">
-                            <p class="font-bold">高山 ⇋ 白川鄉 ⇋ 金澤</p>
-                            <p class="text-sm text-gray-600 font-bold">4人總計已付: **$4,023 TWD**</p>
+                            <p class="text-sm text-gray-600">JR 飛驒特急: ~ $1,122 TWD</p>
                         </li>
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-blue-500">
-                            <p class="font-bold">金澤 ⇋ 名古屋</p>
-                            <p class="text-sm text-gray-600">JR 特急 Shirasagi: **9,850 JPY** (~ $1,970 TWD)</p>
+                            <p class="font-bold">高山 ⇋ 富山</p>
+                            <p class="text-sm text-gray-600">JR 高山本線: ~ $700 TWD</p>
                         </li>
-                        <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-gray-400">
-                            <p class="font-bold">市內交通/巴士</p>
-                            <p class="text-sm text-gray-600">依行程安排彈性使用，請預留每日約 **500 JPY/人** 預算。</p>
+                        <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <p class="font-bold">富山 ⇋ 高岡 ⇋ 白川鄉</p>
+                            <p class="text-sm text-gray-600">富山鐵道+加越能巴士: ~ $500 TWD</p>
+                        </li>
+                        <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-500">
+                            <p class="font-bold">新高岡 ⇋ 金澤</p>
+                            <p class="text-sm text-gray-600">北陸新幹線: ~ $306 TWD</p>
+                        </li>
+                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-indigo-500">
+                            <p class="font-bold">金澤 ⇋ 名古屋</p>
+                            <p class="text-sm text-gray-600">JR 特急 Shirasagi: ~ $1,970 TWD</p>
                         </li>
                     </ul>
                 </div>
 
-                 <!-- Col 3: Entry Tickets Summary (NEW BLOCK) -->
+                 <!-- Col 3: Entry Tickets -->
                 <div class="lg:col-span-1">
                     <h2 class="text-3xl font-bold text-gray-800 border-l-4 border-[#14B8A6] pl-4 mb-8">景點門票總覽 (TWD)</h2>
-                    <p class="text-sm text-gray-500 mb-4 font-semibold">費用估算為 4 人團體總計</p>
+                    <p class="text-sm text-gray-500 mb-2">已移除飛驒之里門票費用。</p>
                     <ul class="space-y-4 text-gray-700">
-                        <!-- Calculated total entry cost for 4 people -->
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-600">
                             <p class="font-bold text-lg text-green-700">總門票估算 (4人合計)</p>
-                            <p class="text-2xl font-extrabold text-green-800 mt-1">$2,400 TWD</p>
-                            <p class="text-xs text-gray-500 mt-2">（主要景點：犬山城、德川園、高山陣屋、飛驒之里、兼六園）</p>
+                            <p class="text-2xl font-extrabold text-green-800 mt-1" id="total-entry-display">$2,400 TWD</p>
                         </li>
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-500">
+                            <p class="font-bold">富山玻璃美術館</p>
+                            <p class="text-sm text-gray-600">常設展: 200 JPY/人</p>
+                        </li>
+                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-500">
                             <p class="font-bold">犬山城 (550 JPY)</p>
-                            <p class="text-sm text-gray-600">4人總計約 **$440 TWD**</p>
                         </li>
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-500">
                             <p class="font-bold">高山陣屋 (440 JPY)</p>
-                            <p class="text-sm text-gray-600">4人總計約 **$352 TWD**</p>
-                        </li>
-                        <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-500">
-                            <p class="font-bold">飛驒之里 (700 JPY)</p>
-                            <p class="text-sm text-gray-600">4人總計約 **$560 TWD**</p>
                         </li>
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-500">
                             <p class="font-bold">兼六園 (320 JPY)</p>
-                            <p class="text-sm text-gray-600">4人總計約 **$256 TWD**</p>
                         </li>
                     </ul>
                 </div>
@@ -1571,67 +295,79 @@
     <!-- Footer -->
     <footer class="bg-[#334155] text-white py-8 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="mb-2 text-lg font-medium"><i class="fa-solid fa-map-pin theme-teal mr-2"></i> 願每一段旅程都成為最美的回憶。</p>
-            <p class="text-gray-400 text-sm">Design by Your Travel Planner</p>
+            <p class="mb-2 text-lg font-medium"><i class="fa-solid fa-map-pin theme-teal mr-2"></i> 名古屋．高山．富山．金澤 — 完美回憶</p>
+            <p class="text-gray-400 text-sm">Designed for You</p>
         </div>
     </footer>
 
     <script>
-        // --- Estimated Costs (JPY, Per Person, One-Way unless noted) ---
         const JPY_TWD_RATE = 0.20;
         const GROUP_SIZE = 4;
+        let chartInstance = null;
+        
+        // 【修改 1】新增：用來記錄哪些天是「展開」的狀態 (預設 Day 1 和 Day 2 展開)
+        let openedDays = new Set([0, 1]); 
 
+        // Cost Dictionary
         const COSTS = {
-            ACCOMMODATION: 13019 + 12754 + 12527 + 11154, // TWD, Total Group Cost
+            ACCOMMODATION: 13019 + 8502 + 3500 + 12527 + 11154,
             TRANSPORT: {
-                NGO_NAGOYA: 1430, // JPY: Meitetsu u-SKY, one-way
-                NAGOYA_TAKAYAMA: 5610, // JPY: JR Wide View Hida, one-way
-                TAKAYAMA_KANAZAWA_FIXED: 4023, // TWD, Group total
-                KANAZAWA_NAGOYA: 9850, // JPY: JR Shirasagi/Transfer, one-way
+                NGO_NAGOYA: 1430,
+                NAGOYA_TAKAYAMA: 5610,
+                TAKAYAMA_TOYAMA: 3500,
+                TOYAMA_LOCAL: 600,
+                TAKAOKA_SHIRAKAWA: 2500,
+                SHINKANSEN_KANAZAWA: 1530,
+                KANAZAWA_NAGOYA: 9850,
             },
             DINING: {
-                // Specified Meals (Estimated JPY/person)
                 熱田蓬萊軒: 4600,
                 仙石すし本店: 2500,
                 麵屋獅子丸: 1600,
-                味藏天國: 5500,
                 矢場味噌豬排: 2500, 
                 馬喰一代午餐: 3500, 
                 金澤關東煮赤玉本店: 4000, 
                 金澤海鮮井近江町: 3000, 
                 金澤蕎麥麵: 2000, 
-                高山鍛治橋拉麵: 1000, 
-                // Removed: 高山牛排: 4500 (Replaced by dinner choice on Day 4)
                 犬山城下町輕食: 1500, 
                 白川鄉簡餐: 1800, 
-                FUMIYA_DINNER: 2500, // Day 1 Dinner
-                KASU_HANAGURUMA_BREAKFAST: 1000, // Day 2 Breakfast/Light Meal
-                // --- New Hida Takayama Meals (Day 4 & 5) ---
-                KOMA_COFFEE: 800, // Day 4 Morning
-                TAKOYAKI_SAGO: 500, // Day 4 Morning
-                ANDERSEN_BREAKFAST: 800, // Day 5 Breakfast
-                SANMACHI_RAMEN: 1200, // Day 4 Lunch
-                EBIYACHI_TEMPURA: 3000, // Day 4 Dinner Option 1 (Average used for total calc)
-                SUMIKU_SOBA: 3000, // Day 4 Dinner Option 2 (Average used for total calc)
-                // Snacks & Light Meals (Estimated JPY/person)
+                FUMIYA_DINNER: 2500,
+                KASU_HANAGURUMA_BREAKFAST: 1000, 
+                KOMA_COFFEE: 800, 
+                TAKOYAKI_SAGO: 500, 
+                ANDERSEN_BREAKFAST: 800, 
+                SANMACHI_RAMEN: 1200, 
                 飛驒牛握壽司_重兵衛: 1000,
                 高山林盛堂_點心: 500,
                 石川屋本舖_點心: 500,
-                // General Estimated Dining (Average per person)
                 GENERAL_MEAL_LIGHT: 1500, 
-                GENERAL_MEAL_STANDARD: 2500, // Used for Day 5 Dinner '京屋'
+                GENERAL_MEAL_STANDARD: 2500,
+                SHIROEBI_TEI: 1800,
+                MENYA_IROHA: 1100, 
             },
             ENTRY: {
-                犬山城: 550, // JPY
-                德川園: 300, // JPY
+                犬山城: 550,
+                德川園: 300,
                 熱田神宮: 0, 
-                高山陣屋: 440, // JPY
-                飛驒之里: 700, // JPY
-                兼六園: 320, // JPY
+                高山陣屋: 440,
+                飛驒之里: 0, 
+                兼六園: 320,
+                TOYAMA_GLASS: 200, 
+            },
+            // Options Costs
+            OPTIONS: {
+                day3: { option1: 5500, option2: 4500 }, // Ajikura vs Maruaki
+                day4: { option1: 3000, option2: 3000 }  // Ebiya vs Sumiku
             }
         };
-        
-        // --- Itinerary Data (Used for integrity and potential future dynamic rendering) ---
+
+        // User Choices State
+        const userChoices = {
+            day3: 'option1', // Default
+            day4: 'option1'  // Default
+        };
+
+        // Itinerary Data
         const itineraryData = [
             { 
                 day: 1, 
@@ -1640,20 +376,20 @@
                 events: [
                 { time: "14:50", title: "高雄起飛", type: "transport", desc: "台灣虎航 IT268", icon: "fa-plane" },
                 { time: "18:50", title: "抵達名古屋中部機場", type: "transport", desc: "入境手續、領取行李", icon: "fa-passport" },
-                { time: "20:00", title: "搭乘名鐵前往市區", type: "transport", desc: `名鐵 μ-SKY (估計每人 $${(COSTS.TRANSPORT.NGO_NAGOYA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-train" },
+                { time: "20:00", title: "搭乘名鐵前往市區", type: "transport", desc: "名鐵 μ-SKY", icon: "fa-train" },
                 { time: "21:00", title: "飯店 Check-in", type: "stay", desc: "名古屋市筒井町 STAY", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Nagoya+Tsutsuicho+STAY" },
-                { time: "22:00", title: "晚餐: ふみ屋 錦店", type: "food", desc: `居酒屋餐點 (估計每人 $${(COSTS.DINING.FUMIYA_DINNER * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
+                { time: "22:00", title: "晚餐: ふみ屋 錦店", type: "food", desc: "居酒屋餐點", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
             ]},
             { 
                 day: 2, 
                 date: "12/23 (二)", 
                 title: "名古屋特色早餐與古城巡禮", 
                 events: [
-                { time: "08:00", title: "早餐: コーヒーハウス かこ 花車本店", type: "food", desc: `名古屋特色小倉吐司 (估計每人 $${(COSTS.DINING.KASU_HANAGURUMA_BREAKFAST * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=コーヒーハウス+かこ+花車本店" },
-                { time: "09:30", title: "犬山城 & 城下町", type: "spot", desc: `門票估計每人 $${(COSTS.ENTRY.犬山城 * JPY_TWD_RATE).toFixed(0)} TWD`, icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
-                { time: "12:30", title: "午餐: 犬山城下町多樣小吃", type: "food", desc: `壽俵屋壽司、クシカツとなまる串炸、蘭丸串燒 (估計每人 $300 TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=犬山城下町+クシカツとなまる" },
-                { time: "15:00", title: "德川園", type: "spot", desc: `門票估計每人 $${(COSTS.ENTRY.德川園 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Tokugawaen" },
-                { time: "18:30", title: "晚餐: 麵屋獅子丸", type: "food", desc: `濃郁雞白湯拉麵 (估計每人 $${(COSTS.DINING.麵屋獅子丸 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" }
+                { time: "08:00", title: "早餐: コーヒーハウス かこ 花車本店", type: "food", desc: "名古屋特色小倉吐司", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=コーヒーハウス+かこ+花車本店" },
+                { time: "09:30", title: "犬山城 & 城下町", type: "spot", desc: "國寶五城之一", icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
+                { time: "12:30", title: "午餐: 犬山城下町多樣小吃", type: "food", desc: "壽俵屋壽司、串炸、串燒", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=犬山城下町" },
+                { time: "15:00", title: "德川園", type: "spot", desc: "日式庭園散策", icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Tokugawaen" },
+                { time: "18:30", title: "晚餐: 麵屋獅子丸", type: "food", desc: "濃郁雞白湯拉麵", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" }
             ]},
             { 
                 day: 3, 
@@ -1661,160 +397,175 @@
                 title: "熱田神宮 & 前往高山", 
                 events: [
                 { time: "09:00", title: "熱田神宮", type: "spot", desc: "莊嚴參拜 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Jingu" },
-                { time: "12:00", title: "午餐: 熱田蓬萊軒", type: "food", desc: `鰻魚飯三吃 (估計每人 $${(COSTS.DINING.熱田蓬萊軒 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
-                { time: "14:30", title: "名古屋車站移動", type: "transport", desc: `搭乘 JR 飛驒特急 (估計每人 $${(COSTS.TRANSPORT.NAGOYA_TAKAYAMA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-train" },
+                { time: "12:00", title: "午餐: 熱田蓬萊軒", type: "food", desc: "鰻魚飯三吃", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
+                { time: "14:30", title: "名古屋車站移動", type: "transport", desc: "搭乘 JR 飛驒特急前往高山", icon: "fa-train" },
                 { time: "17:00", title: "抵達高山 & Check-in", type: "stay", desc: "HOTEL AMANEK Hida Takayama", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=HOTEL+AMANEK+Hida+Takayama" },
-                { time: "19:30", title: "晚餐: 味藏天國", type: "food", desc: `JA直營飛驒牛燒肉 (估計每人 $${(COSTS.DINING.味藏天國 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-fire", link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" }
+                { 
+                    type: "choice", 
+                    dayKey: "day3",
+                    time: "19:30",
+                    title: "晚餐選擇 (互動式)",
+                    options: [
+                        { id: "option1", name: "味藏天國", desc: "JA直營，飛驒牛品質保證", price: 5500, link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" },
+                        { id: "option2", name: "丸明 (高山店)", desc: "老字號精肉店直營燒肉", price: 4500, link: "https://www.google.com/maps/search/?api=1&query=Maruaki+Takayama" }
+                    ]
+                }
             ]},
             { 
                 day: 4, 
                 date: "12/25 (四)", 
-                title: "高山朝市、老街與晚餐選擇", 
+                title: "高山朝市、老街與晚餐", 
                 events: [
-                { time: "08:00", title: "宮川朝市", type: "spot", desc: "逛早市、買農產品 (免門票)", icon: "fa-carrot", link: "https://www.google.com/maps/search/?api=1&query=Miyagawa+Morning+Market" },
-                { time: "08:45", title: "コマコーヒー (Koma Coffee)", type: "food", desc: `特色餅乾咖啡 (估計每人 $${(COSTS.DINING.KOMA_COFFEE * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" },
-                { time: "09:15", title: "たこ焼きさごう (Takoyaki Sago)", type: "food", desc: `美味章魚燒 (估計每人 $${(COSTS.DINING.TAKOYAKI_SAGO * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-cookie-bite", link: "https://www.google.com/maps/search/?api=1&query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" },
-                { time: "09:45", title: "購買 アンデルセン (Andersen) 隔日早餐", type: "food", desc: `購買可頌等麵包 (估計每人 $${(COSTS.DINING.ANDERSEN_BREAKFAST * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-shopping-bag", link: "https://www.google.com/maps/search/?api=1&query=日本〒506-0841+Gifu,+Takayama,+Shimosannomachi,+２３" },
-                { time: "10:15", title: "高山林盛堂", type: "food", desc: `宮川朝市周邊特產/點心: おわら玉天 (估計每人 $${(COSTS.DINING.高山林盛堂_點心 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-cookie-bite", link: "https://www.google.com/maps/search/?api=1&query=Rinseido+Takayama" },
-                { time: "10:45", title: "飛驒牛握壽司「重兵衛」", type: "food", desc: `老街特色點心 (估計每人 $${(COSTS.DINING.飛驒牛握壽司_重兵衛 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Jyubei+Takayama" },
-                { time: "11:15", title: "飛驒高山老街 (三町通) 漫步", type: "spot", desc: "開始逛老街主街區 (免門票)", icon: "fa-store", link: "https://www.google.com/maps/search/?api=1&query=Takayama+Old+Town" },
-                { time: "12:30", title: "午餐: さんまち (Sanmachi)", type: "food", desc: `在地高山拉麵 (估計每人 $${(COSTS.DINING.SANMACHI_RAMEN * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=106-3+Kamisannomachi,+Takayama,+Gifu+506-0846+日本" },
-                { time: "14:30", title: "高山陣屋", type: "spot", desc: `江戶時代官府 (門票估計每人 $${(COSTS.ENTRY.高山陣屋 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-landmark", link: "https://www.google.com/maps/search/?api=1&query=Takayama+Jinya" },
-                { time: "18:00", title: "晚餐選擇 (二選一)", type: "food", desc: `えび八 (天婦羅) 或 寿美久 (蕎麥麵) (估計每人 $${(COSTS.DINING.EBIYACHI_TEMPURA * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=41+Aioimachi,+Takayama,+Gifu+506-0014+日本" }
+                { time: "08:00", title: "宮川朝市", type: "spot", desc: "逛早市、買農產品", icon: "fa-carrot", link: "https://www.google.com/maps/search/?api=1&query=Miyagawa+Morning+Market" },
+                { time: "08:45", title: "朝市點心巡禮", type: "food", desc: "Koma Coffee、章魚燒、林盛堂", icon: "fa-cookie-bite" },
+                { time: "11:15", title: "飛驒高山老街 (三町通)", type: "spot", desc: "老街散步、飛驒牛握壽司", icon: "fa-store", link: "https://www.google.com/maps/search/?api=1&query=Takayama+Old+Town" },
+                { time: "12:30", title: "午餐: さんまち (Sanmachi)", type: "food", desc: "在地高山拉麵", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Sanmachi+Takayama" },
+                { time: "14:30", title: "高山陣屋", type: "spot", desc: "江戶時代官府", icon: "fa-landmark", link: "https://www.google.com/maps/search/?api=1&query=Takayama+Jinya" },
+                { 
+                    type: "choice", 
+                    dayKey: "day4",
+                    time: "18:00",
+                    title: "晚餐選擇 (互動式)",
+                    options: [
+                        { id: "option1", name: "えび八 (Ebiya)", desc: "在地人氣現炸天婦羅", price: 3000, link: "https://www.google.com/maps/search/?api=1&query=Ebiya+Takayama" },
+                        { id: "option2", name: "寿美久 (Sumiku)", desc: "傳統手打蕎麥麵", price: 3000, link: "https://www.google.com/maps/search/?api=1&query=Sumiku+Takayama" }
+                    ]
+                }
             ]},
             { 
                 day: 5, 
                 date: "12/26 (五)", 
-                title: "合掌造聚落體驗", 
+                title: "前往富山：玻璃藝術與環水公園", 
                 events: [
-                { time: "08:00", title: "早餐: アンデルセン (Andersen)", type: "food", desc: `享用前一日於宮川朝市周邊購買的麵包 (估計每人 $${(COSTS.DINING.ANDERSEN_BREAKFAST * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=日本〒506-0841+Gifu,+Takayama,+Shimosannomachi,+２３" },
-                { time: "09:30", title: "飛驒之里 (飛騨の里)", type: "spot", desc: `合掌造民家園 (門票估計每人 $${(COSTS.ENTRY.飛驒之里 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-mountain-sun", link: "https://www.google.com/maps/search/?api=1&query=Hida+Folk+Village" },
-                { time: "12:30", title: "午餐: 鍛治橋拉麵", type: "food", desc: `在地高山拉麵 (估計每人 $${(COSTS.DINING.高山鍛治橋拉麵 * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=鍛治橋拉麵" },
-                { time: "15:00", title: "櫻山八幡宮", type: "spot", desc: "欣賞高山祭屋台 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Sakurayama+Hachimangu" },
-                { time: "18:30", title: "晚餐: 鄉土料理店「京屋」", type: "food", desc: `品嚐朴葉味噌燒等特色和食 (估計每人 $${(COSTS.DINING.GENERAL_MEAL_STANDARD * JPY_TWD_RATE).toFixed(0)} TWD)`, icon: "fa-hotel", link: "https://www.google.com/maps/search/?api=1&query=京屋+高山" }
+                { time: "07:40", title: "高山 → 富山", type: "transport", desc: "搭乘 JR 高山本線前往富山", icon: "fa-train" },
+                { time: "09:30", title: "抵達富山 & 寄放行李", type: "stay", desc: "富山車站周邊或飯店", icon: "fa-suitcase" },
+                { time: "10:30", title: "富山市玻璃美術館", type: "spot", desc: "隈研吾設計建築，欣賞玻璃藝術", icon: "fa-gem", link: "https://www.google.com/maps/search/?api=1&query=Toyama+Glass+Art+Museum" },
+                { time: "12:30", title: "午餐: 白蝦亭 (白えび亭)", type: "food", desc: "富山灣寶石：白蝦天丼", icon: "fa-shrimp", link: "https://www.google.com/maps/search/?api=1&query=Shiroebitei+Toyama" },
+                { time: "14:30", title: "富岩運河環水公園", type: "spot", desc: "漫步公園，造訪最美星巴克", icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Fugan+Canal+Kansui+Park" },
+                { time: "17:00", title: "Check-in", type: "stay", desc: "ホテルエノエ富山 (Hotel Enoe)", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=6-1+Aramachi,+Toyama,+930-0028" },
+                { time: "18:30", title: "晚餐: 麵家いろは (Menya Iroha) CiC店", type: "food", desc: "東京拉麵秀冠軍，黑拉麵名店", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Iroha+CiC" }
             ]},
             { 
                 day: 6, 
                 date: "12/27 (六)", 
-                title: "白川鄉 & 跨城至金澤", 
+                title: "富山 → 白川鄉 → 金澤 (跨城大移動)", 
                 events: [
-                { time: "12:10", title: "高山 → 白川鄉 → 金澤", type: "transport", desc: `長途交通日 (4人總計 $4,023 TWD)`, icon: "fa-bus" },
-                { time: "13:00", title: "午餐: 白川鄉「落人」茶屋", type: "food", desc: `品嚐合掌村簡餐/蕎麥麵 (估計每人 $360 TWD)`, icon: "fa-snowflake", link: "https://www.google.com/maps/search/?api=1&query=落人茶屋+白川鄉" },
+                { time: "08:22", title: "富山 → 高岡", type: "transport", desc: "富山地鐵市內線轉乘愛之風富山鐵道", icon: "fa-train" },
+                { time: "09:10", title: "抵達高岡站", type: "transport", desc: "前往 7 號乘車處等候巴士", icon: "fa-shoe-prints" },
+                { time: "11:00", title: "高岡 → 白川鄉", type: "transport", desc: "搭乘加越能巴士 (世界遺產巴士)", icon: "fa-bus" },
+                { time: "13:10", title: "抵達白川鄉", type: "spot", desc: "世界遺產合掌村散策", icon: "fa-snowflake", link: "https://www.google.com/maps/search/?api=1&query=Shirakawa-go" },
+                { time: "13:30", title: "午餐: 落人 (Ochudo)", type: "food", desc: "合掌村內咖哩飯/紅豆湯", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Ochudo+Shirakawago" },
+                { time: "17:20", title: "白川鄉 → 新高岡", type: "transport", desc: "搭乘北鐵巴士/加越能巴士前往新高岡", icon: "fa-bus" },
+                { time: "18:45", title: "抵達新高岡站", type: "transport", desc: "準備轉乘新幹線 (轉乘時間緊湊請注意)", icon: "fa-person-walking-luggage" },
+                { time: "18:50", title: "新高岡 → 金澤", type: "transport", desc: "搭乘北陸新幹線 (劍 Tsurugi 號)", icon: "fa-train" },
                 { time: "19:40", title: "Check-in", type: "stay", desc: "清蓮 Le Lotus Bleu (金澤)", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Le+Lotus+Bleu+Kanazawa" },
-                { time: "20:30", title: "晚餐: 金澤站「黑百合」餐廳", type: "food", desc: `金澤站內特色料理 (估計每人 $500 TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=黑百合+金澤" }
+                { time: "20:30", title: "晚餐: 黑百合", type: "food", desc: "金澤站內關東煮", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Kuroyuri+Kanazawa" }
             ]},
             { 
                 day: 7, 
                 date: "12/28 (日)", 
                 title: "金澤經典名所", 
                 events: [
-                { time: "09:00", title: "兼六園", type: "spot", desc: `日本三大名園 (門票估計每人 $64 TWD)`, icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Kenrokuen" },
-                { time: "11:30", title: "東茶屋街 & 主計町茶屋街", type: "spot", desc: "金箔冰淇淋、懷舊藝妓街景 (免門票)", icon: "fa-fan", link: "https://www.google.com/maps/search/?api=1&query=Higashi+Chaya+District" },
-                { time: "13:00", title: "午餐: 近江町市場海鮮丼", type: "food", desc: `市場內「近江町食堂」或「井之彌」 (估計每人 $600 TWD)`, icon: "fa-fish", link: "https://www.google.com/maps/search/?api=1&query=近江町食堂" },
-                { time: "15:30", title: "石川屋本舖", type: "food", desc: `點心時間: KAICHIN 琥珀糖 (估計每人 $100 TWD)`, icon: "fa-gift", link: "https://www.google.com/maps/search/?api=1&query=Ishikawaya+Honpo" },
-                { time: "18:30", title: "晚餐: 關東煮「赤玉本店」", type: "food", desc: `金澤特色關東煮專賣店 (估計每人 $800 TWD)`, icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=關東煮+赤玉本店+金澤" }
+                { time: "09:00", title: "兼六園", type: "spot", desc: "日本三大名園", icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Kenrokuen" },
+                { time: "11:30", title: "東茶屋街", type: "spot", desc: "金箔冰淇淋、懷舊街景", icon: "fa-fan", link: "https://www.google.com/maps/search/?api=1&query=Higashi+Chaya+District" },
+                { time: "13:00", title: "午餐: 近江町市場海鮮丼", type: "food", desc: "近江町食堂或井之彌", icon: "fa-fish", link: "https://www.google.com/maps/search/?api=1&query=Omicho+Market" },
+                { time: "15:30", title: "點心: 石川屋本舖", type: "food", desc: "琥珀糖", icon: "fa-gift" },
+                { time: "18:30", title: "晚餐: 赤玉本店", type: "food", desc: "金澤特色關東煮", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=Akadama+Honten+Kanazawa" }
             ]},
             { 
                 day: 8, 
                 date: "12/29 (一)", 
                 title: "金澤武士與返程", 
                 events: [
-                { time: "09:30", title: "長町武家屋敷跡", type: "spot", desc: "古老的土牆與武士住宅區 (免門票)", icon: "fa-house-chimney-user", link: "https://www.google.com/maps/search/?api=1&query=Nagamachi+Bukeyashiki" },
-                { time: "11:00", title: "尾山神社", type: "spot", desc: "和洋折衷的特色神門 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Oyama+Shrine" },
-                { time: "13:00", title: "午餐: 手打蕎麥麵 YABUDA", type: "food", desc: `金澤車站附近蕎麥麵專賣店 (估計每人 $400 TWD)`, icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=手打蕎麥麵+兼六園+YABUDA" },
-                { time: "15:00", title: "金澤 → 名古屋", type: "transport", desc: `JR 特急 Shirasagi 號 (估計每人 $1970 TWD)`, icon: "fa-train", link: "https://www.google.com/maps/search/?api=1&query=金澤車站" },
-                { time: "18:00", title: "抵達名古屋 & Check-in", type: "stay", desc: "Compass Hotel Nagoya", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Compass+Hotel+Nagoya" },
-                { time: "20:00", title: "晚餐: 矢場味噌豬排", type: "food", desc: `名古屋名物味噌豬排 (估計每人 $500 TWD)`, icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=矢場味噌豬排+名古屋" }
+                { time: "09:30", title: "長町武家屋敷跡", type: "spot", desc: "武士住宅區", icon: "fa-house-chimney-user", link: "https://www.google.com/maps/search/?api=1&query=Nagamachi+Bukeyashiki" },
+                { time: "11:00", title: "尾山神社", type: "spot", desc: "特色神門", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Oyama+Shrine" },
+                { time: "13:00", title: "午餐: 手打蕎麥麵 YABUDA", type: "food", desc: "金澤車站附近", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=YABUDA+Kanazawa" },
+                { time: "15:00", title: "金澤 → 名古屋", type: "transport", desc: "JR 特急 Shirasagi", icon: "fa-train" },
+                { time: "18:00", title: "Check-in", type: "stay", desc: "Compass Hotel Nagoya", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Compass+Hotel+Nagoya" },
+                { time: "20:00", title: "晚餐: 矢場味噌豬排", type: "food", desc: "名古屋名物", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Yabaton+Nagoya" }
             ]},
             { 
                 day: 9, 
                 date: "12/30 (二)", 
                 title: "名古屋市區與購物", 
                 events: [
-                { time: "09:00", title: "早餐", type: "stay", desc: "享用飯店簡易早餐", icon: "fa-coffee" },
-                { time: "10:30", title: "大須觀音 & 商店街", type: "spot", desc: "逛街、參拜、購買雜貨 (免門票)", icon: "fa-store", link: "https://www.google.com/maps/search/?api=1&query=Osu+Kannon" },
-                { time: "13:00", title: "午餐: 最飛びヒレ家 馬喰一代 名古屋EAST", type: "food", desc: `飛驒牛燒肉午間套餐 (估計每人 $700 TWD)`, icon: "fa-fire", link: "https://www.google.com/maps/search/?api=1&query=最飛びヒレ家+馬喰一代+名古屋EAST" },
-                { time: "14:30", title: "名站周邊購物", type: "spot", desc: "高島屋、電器行採購伴手禮 (自由活動)", icon: "fa-bag-shopping" },
-                { time: "18:30", title: "晚餐: 仙石すし 本店", type: "food", desc: `超厚切高CP值壽司 (估計每人 $500 TWD)`, icon: "fa-fish", link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi+Honten" }
+                { time: "10:30", title: "大須觀音 & 商店街", type: "spot", desc: "逛街、參拜", icon: "fa-store", link: "https://www.google.com/maps/search/?api=1&query=Osu+Kannon" },
+                { time: "13:00", title: "午餐: 馬喰一代 名古屋EAST", type: "food", desc: "飛驒牛燒肉午間套餐", icon: "fa-fire", link: "https://www.google.com/maps/search/?api=1&query=Bakuroichidai+Nagoya+East" },
+                { time: "14:30", title: "名站周邊購物", type: "spot", desc: "高島屋、電器行", icon: "fa-bag-shopping" },
+                { time: "18:30", title: "晚餐: 仙石すし 本店", type: "food", desc: "高CP值壽司", icon: "fa-fish", link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi+Honten" }
             ]},
             { 
                 day: 10, 
                 date: "12/31 (三)", 
                 title: "回程", 
                 events: [
-                { time: "09:00", title: "早餐 & 最後整理", type: "stay", desc: "飯店簡易早餐，整理行李", icon: "fa-suitcase" },
-                { time: "12:00", title: "午餐: 名古屋車站周邊", type: "food", desc: `在名站周邊享用最後一餐 (估計每人 $300 TWD)`, icon: "fa-utensils" },
-                { time: "15:30", title: "前往機場", type: "transport", desc: `搭乘名鐵 μ-SKY (估計每人 $286 TWD)`, icon: "fa-train" },
-                { time: "17:30", title: "機場 Check-in", type: "transport", desc: "辦理登機手續及免稅店購物", icon: "fa-plane-departure" },
-                { time: "19:40", title: "搭機返台", type: "transport", desc: "台灣虎航 IT269 / 19:40 NGO → 22:35 KHH", icon: "fa-plane" }
+                { time: "12:00", title: "午餐: 名古屋車站周邊", type: "food", desc: "最後一餐", icon: "fa-utensils" },
+                { time: "15:30", title: "前往機場", type: "transport", desc: "名鐵 μ-SKY", icon: "fa-train" },
+                { time: "19:40", title: "搭機返台", type: "transport", desc: "台灣虎航 IT269", icon: "fa-plane" }
             ]}
         ];
 
         const restaurants = [
-            // Nagoya Meals
-            { name: "コーヒーハウス かこ 花車本店", type: "sweet", city: "nagoya", desc: `名古屋特色小倉吐司 (估計 $${(COSTS.DINING.KASU_HANAGURUMA_BREAKFAST * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=コーヒーハウス+かこ+花車本店" },
-            { name: "熱田蓬萊軒", type: "main", city: "nagoya", desc: `名古屋名物 鰻魚飯三吃 (估計 $${(COSTS.DINING.熱田蓬萊軒 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
-            { name: "仙石すし 本店", type: "main", city: "nagoya", desc: `超厚切壽司，高CP值 (估計 $${(COSTS.DINING.仙石すし本店 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi+Honten" },
-            { name: "麵屋獅子丸", type: "main", city: "nagoya", desc: `濃郁雞白湯拉麵 (估計 $${(COSTS.DINING.麵屋獅子丸 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" },
-            { name: "矢場味噌豬排", type: "main", city: "nagoya", desc: `名古屋名物味噌豬排 (估計 $${(COSTS.DINING.矢場味噌豬排 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=矢場味噌豬排+名古屋" },
-            { name: "最飛びヒレ家 馬喰一代 名古屋EAST", type: "main", city: "nagoya", desc: `飛驒牛燒肉午間套餐 (估計 $700 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=最飛びヒレ家+馬喰一代+名古屋EAST" },
-            { name: "ふみ屋 錦店", type: "main", city: "nagoya", desc: `居酒屋餐點 (估計 $${(COSTS.DINING.GENERAL_MEAL_STANDARD * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" },
-            // Nagoya/Inuyama Snacks
-            { name: "壽俵屋", type: "sweet", city: "nagoya", desc: `犬山城下町米包壽司/田樂 (估計 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=犬山壽司店壽俵屋" },
-            { name: "クシカツとなまる", type: "sweet", city: "nagoya", desc: `犬山城下町串炸 (估計 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=クシカツとなまる+犬山" },
-            { name: "蘭丸", type: "sweet", city: "nagoya", desc: `犬山城下町串燒 (估計 $${(COSTS.DINING.犬山城下町輕食 * JPY_TWD_RATE).toFixed(0)} TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=蘭丸+犬山" },
-            // Takayama Meals & Snacks
-            { name: "味藏天國", type: "main", city: "takayama", desc: `JA直營飛驒牛燒肉 (估計 $1100 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" },
-            { name: "飛驒牛專賣店「丸明」", type: "main", city: "takayama", desc: `飛驒牛排/壽喜燒 (估計 $900 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=丸明+高山" },
-            { name: "鍛治橋拉麵", type: "main", city: "takayama", desc: `高山拉麵專賣店 (估計 $200 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=鍛治橋拉麵" },
-            { name: "重兵衛", type: "sweet", city: "takayama", desc: `飛驒牛握壽司 (估計 $200 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Jyubei+Takayama" },
-            { name: "高山林盛堂", type: "sweet", city: "takayama", desc: `おわら玉天 (點心估計 $100 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Rinseido+Takayama" },
-            { name: "コマコーヒー (Koma Coffee)", type: "sweet", city: "takayama", desc: `特色餅乾咖啡，朝市周邊 (估計 $160 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" },
-            { name: "たこ焼きさごう (Takoyaki Sago)", type: "sweet", city: "takayama", desc: `美味章魚燒，朝市周邊 (估計 $100 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Shimosannomachi,+Takayama,+Gifu+506-0841+日本" },
-            { name: "アンデルセン (Andersen)", type: "sweet", city: "takayama", desc: `特色可頌，適合隔日早餐 (估計 $160 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=日本〒506-0841+Gifu,+Takayama,+Shimosannomachi,+２３" },
-            { name: "さんまち (Sanmachi)", type: "main", city: "takayama", desc: `在地高山拉麵 (估計 $240 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=106-3+Kamisannomachi,+Takayama,+Gifu+506-0846+日本" },
-            { name: "えび八 (海老ハ)", type: "main", city: "takayama", desc: `現炸海鮮天婦羅 (估計 $600 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=41+Aioimachi,+Takayama,+Gifu+506-0014+日本" },
-            { name: "寿美久", type: "main", city: "takayama", desc: `手打蕎麥麵專賣店 (估計 $600 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=45+Uramachi,+Takayama,+Gifu+506-0013+日本" },
-            // Kanazawa Meals & Snacks
-            { name: "石川屋本舖", type: "sweet", city: "kanazawa", desc: `KAICHIN 琥珀糖 (估計 $100 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=Ishikawaya+Honpo" },
-            { name: "近江町食堂", type: "main", city: "kanazawa", desc: `近江町市場海鮮丼 (估計 $600 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=近江町食堂" },
-            { name: "關東煮「赤玉本店」", type: "main", city: "kanazawa", desc: `金澤特色關東煮專賣店 (估計 $800 TWD/人)`, link: "https://www.google.com/maps/search/?api=1&query=關東煮+赤玉本店+金澤" }
+            // Nagoya
+            { name: "コーヒーハウス かこ", type: "sweet", city: "nagoya", desc: "小倉吐司", link: "https://www.google.com/maps/search/?api=1&query=Coffee+House+Kako" },
+            { name: "熱田蓬萊軒", type: "main", city: "nagoya", desc: "鰻魚飯三吃", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
+            { name: "仙石すし 本店", type: "main", city: "nagoya", desc: "厚切壽司", link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi" },
+            { name: "麵屋獅子丸", type: "main", city: "nagoya", desc: "雞白湯拉麵", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" },
+            { name: "矢場味噌豬排", type: "main", city: "nagoya", desc: "味噌豬排", link: "https://www.google.com/maps/search/?api=1&query=Yabaton" },
+            { name: "馬喰一代", type: "main", city: "nagoya", desc: "飛驒牛燒肉", link: "https://www.google.com/maps/search/?api=1&query=Bakuroichidai" },
+            { name: "ふみ屋", type: "main", city: "nagoya", desc: "居酒屋", link: "https://www.google.com/maps/search/?api=1&query=Fumiya+Nishiki" },
+            // Takayama
+            { name: "味藏天國", type: "main", city: "takayama", desc: "JA直營燒肉", link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" },
+            { name: "丸明", type: "main", city: "takayama", desc: "飛驒牛專賣", link: "https://www.google.com/maps/search/?api=1&query=Maruaki+Takayama" },
+            { name: "重兵衛", type: "sweet", city: "takayama", desc: "飛驒牛握壽司", link: "https://www.google.com/maps/search/?api=1&query=Jyubei+Takayama" },
+            { name: "林盛堂", type: "sweet", city: "takayama", desc: "玉天點心", link: "https://www.google.com/maps/search/?api=1&query=Rinseido" },
+            { name: "えび八", type: "main", city: "takayama", desc: "天婦羅", link: "https://www.google.com/maps/search/?api=1&query=Ebiya+Takayama" },
+            { name: "寿美久", type: "main", city: "takayama", desc: "手打蕎麥麵", link: "https://www.google.com/maps/search/?api=1&query=Sumiku+Takayama" },
+            // Toyama (Updated)
+            { name: "白えび亭 (白蝦亭)", type: "main", city: "toyama", desc: "富山白蝦天丼", link: "https://www.google.com/maps/search/?api=1&query=Shiroebitei+Toyama" },
+            { name: "麵家いろは CiC店", type: "main", city: "toyama", desc: "東京拉麵秀冠軍黑拉麵", link: "https://www.google.com/maps/search/?api=1&query=Menya+Iroha+CiC" },
+            // Kanazawa
+            { name: "石川屋本舖", type: "sweet", city: "kanazawa", desc: "琥珀糖", link: "https://www.google.com/maps/search/?api=1&query=Ishikawaya+Honpo" },
+            { name: "近江町食堂", type: "main", city: "kanazawa", desc: "海鮮丼", link: "https://www.google.com/maps/search/?api=1&query=Omicho+Shokudo" },
+            { name: "赤玉本店", type: "main", city: "kanazawa", desc: "關東煮", link: "https://www.google.com/maps/search/?api=1&query=Akadama+Honten" },
+            { name: "黑百合", type: "main", city: "kanazawa", desc: "金澤站關東煮", link: "https://www.google.com/maps/search/?api=1&query=Kuroyuri" }
         ];
 
-        // Helper function to calculate total estimated costs
         function calculateTotalBudget() {
-            // 1. 住宿 (TWD, Group Total)
+            // Accommodation
             const accommodationCost = COSTS.ACCOMMODATION;
 
-            // 2. 交通 (TWD, Group Total)
+            // Transport (All Group Total)
             const transport1 = GROUP_SIZE * 2 * COSTS.TRANSPORT.NGO_NAGOYA * JPY_TWD_RATE; 
             const transport2 = GROUP_SIZE * 1 * COSTS.TRANSPORT.NAGOYA_TAKAYAMA * JPY_TWD_RATE;
-            const transport3 = COSTS.TRANSPORT.TAKAYAMA_KANAZAWA_FIXED;
-            const transport4 = GROUP_SIZE * 1 * COSTS.TRANSPORT.KANAZAWA_NAGOYA * JPY_TWD_RATE;
-            const totalTransport = transport1 + transport2 + transport3 + transport4;
+            const transport3 = GROUP_SIZE * 1 * COSTS.TRANSPORT.TAKAYAMA_TOYAMA * JPY_TWD_RATE;
+            const transport4 = GROUP_SIZE * 1 * COSTS.TRANSPORT.TOYAMA_LOCAL * JPY_TWD_RATE;
+            const transport5 = GROUP_SIZE * 1 * COSTS.TRANSPORT.TAKAOKA_SHIRAKAWA * JPY_TWD_RATE;
+            const transport6 = GROUP_SIZE * 1 * COSTS.TRANSPORT.SHINKANSEN_KANAZAWA * JPY_TWD_RATE;
+            const transport7 = GROUP_SIZE * 1 * COSTS.TRANSPORT.KANAZAWA_NAGOYA * JPY_TWD_RATE;
+            const totalTransport = transport1 + transport2 + transport3 + transport4 + transport5 + transport6 + transport7;
 
-            // 3. 餐飲 (TWD, Group Total) 
+            // Dining
+            let totalDiningJPY = 0;
+            // Add fixed meals
+            for (let key in COSTS.DINING) {
+                if(key !== "GENERAL_MEAL_LIGHT" && key !== "GENERAL_MEAL_STANDARD") {
+                    totalDiningJPY += COSTS.DINING[key];
+                }
+            }
+            // Add General Meals
+            totalDiningJPY += (5 * COSTS.DINING.GENERAL_MEAL_STANDARD);
             
-            const totalDiningCostJPY = (
-                COSTS.DINING.熱田蓬萊軒 + COSTS.DINING.仙石すし本店 + COSTS.DINING.麵屋獅子丸 + COSTS.DINING.味藏天國 + COSTS.DINING.矢場味噌豬排 + 
-                COSTS.DINING.馬喰一代午餐 + COSTS.DINING.金澤關東煮赤玉本店 + COSTS.DINING.金澤海鮮井近江町 + COSTS.DINING.金澤蕎麥麵 + 
-                COSTS.DINING.高山鍛治橋拉麵 + COSTS.DINING.犬山城下町輕食 + COSTS.DINING.白川鄉簡餐 + 
-                COSTS.DINING.KASU_HANAGURUMA_BREAKFAST + COSTS.DINING.FUMIYA_DINNER + COSTS.DINING.飛驒牛握壽司_重兵衛 + 
-                COSTS.DINING.高山林盛堂_點心 + COSTS.DINING.石川屋本舖_點心 + 
-                // New additions and replacements:
-                COSTS.DINING.KOMA_COFFEE + COSTS.DINING.TAKOYAKI_SAGO + COSTS.DINING.ANDERSEN_BREAKFAST + COSTS.DINING.SANMACHI_RAMEN +
-                // Day 4 Dinner is a choice, use average:
-                (COSTS.DINING.EBIYACHI_TEMPURA + COSTS.DINING.SUMIKU_SOBA) / 2
-            );
-
-            // Rough estimation for other generic meals/snacks (5 remaining)
-            const generalMealsMultiplier = 5; 
-            const totalGeneralDiningJPY = generalMealsMultiplier * COSTS.DINING.GENERAL_MEAL_LIGHT;
+            // Add Choice Meals
+            const day3ChoiceCost = COSTS.OPTIONS.day3[userChoices.day3];
+            const day4ChoiceCost = COSTS.OPTIONS.day4[userChoices.day4];
+            totalDiningJPY += day3ChoiceCost;
+            totalDiningJPY += day4ChoiceCost;
             
-            const totalDining = GROUP_SIZE * (totalDiningCostJPY + totalGeneralDiningJPY) * JPY_TWD_RATE;
+            const totalDining = GROUP_SIZE * totalDiningJPY * JPY_TWD_RATE;
 
-            // 4. 門票 (TWD, Group Total)
-            const totalEntryJPY = COSTS.ENTRY.犬山城 + COSTS.ENTRY.德川園 + COSTS.ENTRY.高山陣屋 + COSTS.ENTRY.飛驒之里 + COSTS.ENTRY.兼六園;
+            // Entry - Updated removing Hida Folk Village
+            const totalEntryJPY = COSTS.ENTRY.犬山城 + COSTS.ENTRY.德川園 + COSTS.ENTRY.高山陣屋 + COSTS.ENTRY.飛驒之里 + COSTS.ENTRY.兼六園 + COSTS.ENTRY.TOYAMA_GLASS;
             const totalEntry = GROUP_SIZE * totalEntryJPY * JPY_TWD_RATE;
 
             return {
@@ -1825,154 +576,128 @@
                 Total: Math.round(accommodationCost + totalTransport + totalDining + totalEntry)
             };
         }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            initCharts();
-            // Note: renderFullItinerary, renderRestaurants are already rendered in HTML for initial load and do not need to be called here.
-            setupMobileMenu();
-            setupFilterButtons();
 
-            // Set the correct icon state for Day 2 and Day 3 (as they are hardcoded open)
-            // Note: Day 1, Day 4-10 are hidden by default in the HTML structure.
-            // Day 2 and Day 3 were left open in the previous versions, keeping them closed by default now for clean UI.
-            // We just need to ensure the logic works.
-        });
-
-        function setupMobileMenu() {
-            const btn = document.getElementById('mobile-menu-btn');
-            const menu = document.getElementById('mobile-menu');
-            const links = document.querySelectorAll('.mobile-link');
-
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-            });
-
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.add('hidden');
-                });
-            });
-        }
-
-        function initCharts() {
-            const budget = calculateTotalBudget();
-
-            // --- Chart 1: Total Budget Breakdown ---
-            const ctxBudget = document.getElementById('budgetChart').getContext('2d');
-            new Chart(ctxBudget, {
-                type: 'bar',
-                data: {
-                    labels: ['住宿 (9晚)', '交通 (長途)', '餐飲 (10天)', '門票 (景點)'],
-                    datasets: [{
-                        label: '費用估算 (TWD)',
-                        data: [budget.Accommodation, budget.Transport, budget.Dining, budget.Entry],
-                        backgroundColor: ['#14B8A6', '#3B82F6', '#F59E0B', '#EF4444'],
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: $${context.parsed.y.toLocaleString()} TWD`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: { beginAtZero: true, title: { display: true, text: '總費用 (TWD, 四人份)' } }
-                    }
-                }
-            });
-
-            // --- Chart 2: Travel Time ---
-            const ctxTime = document.getElementById('timeChart').getContext('2d');
-            new Chart(ctxTime, {
-                type: 'bar',
-                data: {
-                    labels: ['高雄-名古屋 (飛機)', '名古屋-高山 (JR特急)', '高山-金澤 (巴士+新幹線)', '金澤-名古屋 (JR特急)'],
-                    datasets: [{
-                        label: '預估耗時 (小時)',
-                        data: [4, 2.5, 4.5, 3], 
-                        backgroundColor: '#14B8A6',
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, title: { display: true, text: '小時' } }
-                    }
-                }
-            });
-
-            // Update the hardcoded total cost display with the new calculated total
-            document.querySelector('#dashboard .bg-teal-50 p').innerHTML = 
-                `<i class="fa-solid fa-coins mr-1 theme-teal"></i> 預估總花費約 **$${budget.Total.toLocaleString()} TWD** (不含機票與個人購物)。`;
-        }
-
-        // 3. Itinerary Rendering (Vertical Accordion) - Keeping toggleAccordion function.
-        
-        window.toggleAccordion = function(index) {
-            const content = document.getElementById(`content-${index}`);
-            const icon = document.getElementById(`icon-${index}`);
-            
-            if (content.classList.contains('hidden')) {
-                // Open accordion
-                content.classList.remove('hidden');
-                icon.classList.add('rotate-180');
-            } else {
-                // Close accordion
-                content.classList.add('hidden');
-                icon.classList.remove('rotate-180');
-            }
+        // Handle User Choice Selection
+        window.selectChoice = function(dayKey, optionId) {
+            userChoices[dayKey] = optionId;
+            // 點擊選擇時，確保當天的狀態被記錄為「展開」(以防它不在 Set 裡)
+            // 因為是 UI 互動觸發，一定是展開狀態下才能點擊，但保險起見我們不依賴 renderItinerary 來修改 Set
+            renderItinerary(); // Re-render to update selected state UI
+            updateChart(); // Update budget chart
         };
 
-        // 4. Restaurant Filter & Rendering
-        function setupFilterButtons() {
-            const filterBtns = document.querySelectorAll('#food .filter-btn');
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    // Update UI
-                    filterBtns.forEach(b => {
-                        b.classList.remove('bg-[#14B8A6]', 'text-white', 'shadow-md');
-                        b.classList.add('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
-                    });
-                    e.target.classList.remove('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
-                    e.target.classList.add('bg-[#14B8A6]', 'text-white', 'shadow-md');
+        function updateChart() {
+            const budget = calculateTotalBudget();
+            document.getElementById('total-budget-display').innerHTML = `<i class="fa-solid fa-coins mr-1 theme-teal"></i> 預估總花費約 **$${budget.Total.toLocaleString()} TWD** (不含機票與個人購物)。`;
+            document.getElementById('total-entry-display').innerText = `$${budget.Entry.toLocaleString()} TWD`;
 
-                    // Filter logic
-                    const filter = e.target.getAttribute('data-filter');
-                    renderRestaurants(filter);
-                });
-            });
+            if (chartInstance) {
+                chartInstance.data.datasets[0].data = [budget.Accommodation, budget.Transport, budget.Dining, budget.Entry];
+                chartInstance.update();
+            }
+        }
+
+        function renderItinerary() {
+            const container = document.getElementById('full-itinerary-container');
+            container.innerHTML = itineraryData.map((day, index) => {
+                // 【修改 2】根據 openedDays Set 決定顯示狀態
+                const isHidden = !openedDays.has(index);
+                const hiddenClass = isHidden ? 'hidden' : '';
+                const iconClass = isHidden ? '' : 'rotate-180';
+
+                return `
+                <div class="timeline-node bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#14B8A6] transition duration-300 ease-in-out hover:shadow-xl group">
+                    <div class="flex justify-between items-center cursor-pointer" onclick="toggleAccordion(${index})">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="bg-teal-100 theme-teal px-3 py-1 rounded-full text-base font-semibold mr-3">Day ${day.day}</span>
+                            ${day.date} - ${day.title}
+                        </h3>
+                        <i id="icon-${index}" class="fa-solid fa-chevron-down text-gray-500 transition duration-300 ${iconClass}"></i>
+                    </div>
+                    <div id="content-${index}" class="mt-4 ${hiddenClass} overflow-hidden transition-all duration-500 ease-in-out">
+                        <div class="relative pl-6 pt-4">
+                            <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
+                            ${day.events.map(event => {
+                                if (event.type === 'choice') {
+                                    return `
+                                    <div class="relative flex flex-col mb-6 last:mb-0 ml-10">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">${event.time}</span>
+                                            <h4 class="font-semibold text-gray-800">${event.title}</h4>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            ${event.options.map(opt => {
+                                                const isSelected = userChoices[event.dayKey] === opt.id;
+                                                return `
+                                                <div onclick="selectChoice('${event.dayKey}', '${opt.id}')" 
+                                                     class="choice-card p-4 rounded-lg cursor-pointer flex flex-col justify-between ${isSelected ? 'selected' : 'bg-gray-50 hover:bg-gray-100'}">
+                                                    <div>
+                                                        <div class="flex justify-between items-center mb-1">
+                                                            <h5 class="font-bold text-[#334155]">${opt.name}</h5>
+                                                            ${isSelected ? '<i class="fa-solid fa-circle-check text-teal-500 text-lg"></i>' : '<i class="fa-regular fa-circle text-gray-400 text-lg"></i>'}
+                                                        </div>
+                                                        <p class="text-xs text-gray-500 mb-2">${opt.desc}</p>
+                                                        <p class="text-sm font-semibold text-gray-700">約 ${opt.price} JPY</p>
+                                                    </div>
+                                                    <a href="${opt.link}" target="_blank" onclick="event.stopPropagation()" class="text-blue-500 hover:text-blue-700 text-xs font-medium mt-3 inline-block">
+                                                        <i class="fa-solid fa-location-dot mr-1"></i>Google Maps
+                                                    </a>
+                                                </div>
+                                                `;
+                                            }).join('')}
+                                        </div>
+                                    </div>
+                                    `;
+                                } else {
+                                    return `
+                                    <div class="relative flex items-start mb-6 last:mb-0">
+                                        <div class="flex-shrink-0 w-6 h-6 rounded-full ${getIconColor(event.type)} flex items-center justify-center border-4 border-white z-10 absolute left-5 -top-1">
+                                            <i class="fa-solid ${event.icon} text-xs"></i>
+                                        </div>
+                                        <div class="ml-10 pt-0.5">
+                                            <div class="flex items-center space-x-3 mb-1">
+                                                <span class="text-sm font-mono text-gray-600 bg-gray-100 px-2 py-0.5 rounded">${event.time}</span>
+                                                <h4 class="font-semibold text-gray-800">${event.title}</h4>
+                                            </div>
+                                            <p class="text-sm text-gray-500">${event.desc}</p>
+                                            ${event.link ? `<a href="${event.link}" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps</a>` : ''}
+                                        </div>
+                                    </div>
+                                    `;
+                                }
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function getIconColor(type) {
+            switch(type) {
+                case 'transport': return 'bg-blue-100 text-blue-600';
+                case 'food': return 'bg-orange-100 text-orange-600';
+                case 'stay': return 'bg-yellow-100 text-yellow-600';
+                case 'spot': return 'bg-green-100 text-green-600';
+                default: return 'bg-gray-100 text-gray-600';
+            }
         }
 
         function renderRestaurants(filter) {
             const container = document.getElementById('restaurant-grid');
-            // Filter logic supports filtering by city OR type (main/sweet)
             const filtered = filter === 'all' 
                 ? restaurants 
                 : restaurants.filter(r => r.city === filter || (filter === 'main' && r.type === 'main') || (filter === 'sweet' && r.type === 'sweet'));
 
             container.innerHTML = filtered.map(r => {
-                let badgeColor = r.city === 'nagoya' ? 'bg-blue-100 text-blue-800' : (r.city === 'takayama' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800');
-                let cityLabel = r.city === 'nagoya' ? '名古屋' : (r.city === 'takayama' ? '高山' : '金澤');
-                let typeIcon = r.type === 'main' ? 'fa-utensils' : (r.type === 'sweet' ? 'fa-cookie-bite' : 'fa-utensils'); // Added icon fallback/default
-                if (r.name.includes("Coffee") || r.name.includes("かこ") || r.name.includes("アンデルセン")) typeIcon = 'fa-mug-hot'; // Special icons for coffee/breakfast
-                if (r.name.includes("たこ焼き")) typeIcon = 'fa-cookie-bite';
-                
-                // Special icon for Ebiya (Shrimp/Tempura)
-                if (r.name.includes("えび八")) typeIcon = 'fa-shrimp';
+                let badgeColor = '';
+                let cityLabel = '';
+                if(r.city === 'nagoya') { badgeColor = 'bg-blue-100 text-blue-800'; cityLabel = '名古屋'; }
+                else if(r.city === 'takayama') { badgeColor = 'bg-yellow-100 text-yellow-800'; cityLabel = '高山'; }
+                else if(r.city === 'toyama') { badgeColor = 'bg-indigo-100 text-indigo-800'; cityLabel = '富山'; }
+                else { badgeColor = 'bg-green-100 text-green-800'; cityLabel = '金澤'; }
+
+                let typeIcon = r.type === 'main' ? 'fa-utensils' : 'fa-cookie-bite';
                 
                 return `
                 <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-gray-100 flex flex-col justify-between">
@@ -1991,6 +716,78 @@
                 `;
             }).join('');
         }
-    </script>
 
+        // 【修改 3】更新 toggleAccordion 邏輯以使用 Set
+        window.toggleAccordion = function(index) {
+            const content = document.getElementById(`content-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            // 檢查並切換狀態
+            if (openedDays.has(index)) {
+                openedDays.delete(index); // 從 Set 移除
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            } else {
+                openedDays.add(index); // 加入 Set
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderItinerary();
+            renderRestaurants('all');
+
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+
+            const filterBtns = document.querySelectorAll('#food .filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-[#14B8A6]', 'text-white', 'shadow-md');
+                        b.classList.add('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
+                    });
+                    e.target.classList.remove('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
+                    e.target.classList.add('bg-[#14B8A6]', 'text-white', 'shadow-md');
+                    renderRestaurants(e.target.getAttribute('data-filter'));
+                });
+            });
+
+            // Init Charts
+            const budget = calculateTotalBudget();
+            document.getElementById('total-budget-display').innerHTML = `<i class="fa-solid fa-coins mr-1 theme-teal"></i> 預估總花費約 **$${budget.Total.toLocaleString()} TWD** (不含機票與個人購物)。`;
+            document.getElementById('total-entry-display').innerText = `$${budget.Entry.toLocaleString()} TWD`;
+
+            const ctxBudget = document.getElementById('budgetChart').getContext('2d');
+            chartInstance = new Chart(ctxBudget, {
+                type: 'bar',
+                data: {
+                    labels: ['住宿', '交通', '餐飲', '門票'],
+                    datasets: [{
+                        label: '費用估算 (TWD)',
+                        data: [budget.Accommodation, budget.Transport, budget.Dining, budget.Entry],
+                        backgroundColor: ['#14B8A6', '#3B82F6', '#F59E0B', '#EF4444'],
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            new Chart(document.getElementById('timeChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['名古屋-高山', '高山-富山', '富山-白川-金澤', '金澤-名古屋'],
+                    datasets: [{
+                        label: '預估耗時 (小時)',
+                        data: [2.5, 1.5, 5, 3], 
+                        backgroundColor: '#14B8A6',
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        });
+    </script>
 </body></html>

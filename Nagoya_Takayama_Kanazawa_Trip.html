@@ -242,8 +242,8 @@
                             <p class="text-sm text-gray-600">名鐵特急/μ-SKY: ~ $286 TWD</p>
                         </li>
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-orange-500">
-                            <p class="font-bold">名古屋 ⇋ 高山</p>
-                            <p class="text-sm text-gray-600">JR 飛驒特急: ~ $1,122 TWD</p>
+                            <p class="font-bold">名古屋/犬山 ⇋ 高山</p>
+                            <p class="text-sm text-gray-600">JR 飛驒特急 (經轉乘): ~ $1,122 TWD</p>
                         </li>
                         <li class="bg-white p-5 rounded-lg shadow-sm border-l-4 border-blue-500">
                             <p class="font-bold">高山 ⇋ 富山</p>
@@ -305,8 +305,8 @@
         const GROUP_SIZE = 4;
         let chartInstance = null;
         
-        // 【修改 1】新增：用來記錄哪些天是「展開」的狀態 (預設 Day 1 和 Day 2 展開)
-        let openedDays = new Set([0, 1]); 
+        // 【修改 1】設定初始展開狀態為空
+        let openedDays = new Set(); 
 
         // Cost Dictionary
         const COSTS = {
@@ -377,29 +377,31 @@
                 { time: "14:50", title: "高雄起飛", type: "transport", desc: "台灣虎航 IT268", icon: "fa-plane" },
                 { time: "18:50", title: "抵達名古屋中部機場", type: "transport", desc: "入境手續、領取行李", icon: "fa-passport" },
                 { time: "20:00", title: "搭乘名鐵前往市區", type: "transport", desc: "名鐵 μ-SKY", icon: "fa-train" },
-                { time: "21:00", title: "飯店 Check-in", type: "stay", desc: "名古屋市筒井町 STAY", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Nagoya+Tsutsuicho+STAY" },
+                { time: "21:00", title: "飯店 Check-in", type: "stay", desc: "名古屋市筒井町 STAY", icon: "fa-bed", link: "https://www.google.com/maps/place/筒井町STAY/@35.1719656,136.9189238,15.25z/data=!4m11!3m10!1s0x600371e46d2b6bfd:0x2b7c729dbc15be94!5m4!1s2025-12-26!2i2!4m1!1i2!8m2!3d35.1777401!4d136.9312411!16s%2Fg%2F11l2q91mcm?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "22:00", title: "晚餐: ふみ屋 錦店", type: "food", desc: "居酒屋餐點", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
             ]},
             { 
                 day: 2, 
                 date: "12/23 (二)", 
-                title: "名古屋特色早餐與古城巡禮", 
+                title: "熱田神宮參拜與市區巡禮", 
                 events: [
-                { time: "08:00", title: "早餐: コーヒーハウス かこ 花車本店", type: "food", desc: "名古屋特色小倉吐司", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=コーヒーハウス+かこ+花車本店" },
-                { time: "09:30", title: "犬山城 & 城下町", type: "spot", desc: "國寶五城之一", icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
-                { time: "12:30", title: "午餐: 犬山城下町多樣小吃", type: "food", desc: "壽俵屋壽司、串炸、串燒", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=犬山城下町" },
+                { time: "09:00", title: "熱田神宮", type: "spot", desc: "莊嚴參拜 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Jingu" },
+                { time: "12:00", title: "午餐: 熱田蓬萊軒", type: "food", desc: "鰻魚飯三吃", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
                 { time: "15:00", title: "德川園", type: "spot", desc: "日式庭園散策", icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Tokugawaen" },
                 { time: "18:30", title: "晚餐: 麵屋獅子丸", type: "food", desc: "濃郁雞白湯拉麵", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" }
             ]},
             { 
                 day: 3, 
                 date: "12/24 (三)", 
-                title: "熱田神宮 & 前往高山", 
+                title: "犬山城古都漫遊 & 前往高山", 
                 events: [
-                { time: "09:00", title: "熱田神宮", type: "spot", desc: "莊嚴參拜 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Jingu" },
-                { time: "12:00", title: "午餐: 熱田蓬萊軒", type: "food", desc: "鰻魚飯三吃", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
-                { time: "14:30", title: "名古屋車站移動", type: "transport", desc: "搭乘 JR 飛驒特急前往高山", icon: "fa-train" },
-                { time: "17:00", title: "抵達高山 & Check-in", type: "stay", desc: "HOTEL AMANEK Hida Takayama", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=HOTEL+AMANEK+Hida+Takayama" },
+                { time: "08:00", title: "早餐: コーヒーハウス かこ 花車本店", type: "food", desc: "名古屋特色小倉吐司", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=コーヒーハウス+かこ+花車本店" },
+                { time: "09:30", title: "犬山城 & 城下町", type: "spot", desc: "國寶五城之一", icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
+                { time: "12:30", title: "午餐: 犬山城下町多樣小吃", type: "food", desc: "壽俵屋壽司、串炸、串燒", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=犬山城下町" },
+                { time: "14:55", title: "名鐵犬山線 (犬山 → 新鵜沼)", type: "transport", desc: "前往新鵜沼轉乘", icon: "fa-train" },
+                { time: "15:07", title: "JR高山本線 (新鵜沼 → 美濃太田)", type: "transport", desc: "普通列車轉乘", icon: "fa-train" },
+                { time: "15:30", title: "JR飛驒特急 (美濃太田 → 高山)", type: "transport", desc: "舒適特急列車直達高山", icon: "fa-train" },
+                { time: "17:13", title: "抵達高山 & Check-in", type: "stay", desc: "HOTEL AMANEK Hida Takayama", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=HOTEL+AMANEK+Hida+Takayama" },
                 { 
                     type: "choice", 
                     dayKey: "day3",

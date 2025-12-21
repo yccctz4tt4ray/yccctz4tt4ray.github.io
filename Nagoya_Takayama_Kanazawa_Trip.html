@@ -361,7 +361,6 @@
                 大須外郎本店: 800,
                 鳴門鯛燒本舖: 300,
                 仙石壽司本店: 3500,
-                Yakiniku_Jiro_Nishiki: 2000,
 
             },
             ENTRY: {
@@ -377,7 +376,8 @@
                 day4: { option1: 3000, option2: 3000 }, // Ebiya vs Sumiku
                 day5: { option1: 11000, option2: 5000 }, // Himihama vs Kame Sushi
                 day5Lunch: { option1: 2000, option2: 6000 }, // Shin Tonkatsu vs Shiroebitei
-                day8: { option1: 1800, option2: 3850 } // Otafuku vs Tonariya
+                day8: { option1: 1800, option2: 3850 }, // Otafuku vs Tonariya
+                day10: { option1: 3000, option2: 4650, option3: 2790, option4: 14300 } // Yakiniku Jiro Nishiki vs Maruya Honten vs Gajapo vs Ningyocho Imahan
             }
         };
 
@@ -387,7 +387,8 @@
             day4: 'option1', // Default
             day5: 'option1', // Default (Dinner)
             day5Lunch: 'option1', // Default (Lunch)
-            day8: 'option1'  // Default
+            day8: 'option1',  // Default
+            day10: 'option1'  // Default
         };
 
         // Itinerary Data
@@ -424,8 +425,7 @@
                 { time: "08:30", title: "早餐: 7-ELEVEN", type: "food", desc: "筒井町 STAY 旁邊便利商店 (餐後退房)", icon: "fa-mug-hot", link: "https://www.google.com/maps/place/%E8%B6%85%E5%95%86+7-ELEVEN/@35.1779698,136.930956,19.83z/data=!4m6!3m5!1s0x600370e4d8a7e1f5:0xbaa1508092d19f06!8m2!3d35.1777975!4d136.9310102!16s%2Fg%2F1wk4c_3p?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/dXYT2Tl.jpg" },
                 { time: "09:34", title: "前往犬山城", type: "transport", desc: "搭乘地鐵與名鐵前往犬山", icon: "fa-train", link: "https://www.google.com/maps/dir/%E6%97%A5%E6%9C%AC%E3%80%92461-0003+Aichi,+Nagoya,+Higashi+Ward,+Tsutsuicho,+4+Chome%E2%88%9232+%E7%AD%92%E4%BA%95%E7%94%BASTAY/%E6%97%A5%E6%9C%AC%E6%84%9B%E7%9F%A5%E7%B8%A3%E7%8A%AC%E5%B1%B1%E5%B8%82+Inuyama,+Kitakoken+%E7%8A%AC%E5%B1%B1%E5%9F%8E/@35.2671366,136.7425829,11z/am=t/data=!4m18!4m17!1m5!1m1!1s0x600371e46d2b6bfd:0x2b7c729dbc15be94!2m2!1d136.931247!2d35.1777599!1m5!1m1!1s0x60030ef5ad48ed91:0x285afa434603f635!2m2!1d136.9391766!2d35.3883604!2m3!6e0!7e2!8j1766568840!3e3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "11:00", title: "犬山城", type: "spot", desc: "國寶五城之一", icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
-                { 
-                    time: "12:30", 
+                { time: "12:30", 
                     title: "午餐: 犬山城下町小吃巡禮", 
                     type: "grid", 
                     layout: "grid", 
@@ -438,8 +438,7 @@
                 },
                 { time: "14:55", title: "前往高山", type: "transport", desc: "名鐵犬山線轉乘JR高山本線", icon: "fa-train", link: "https://www.google.com/maps/dir/%E7%8A%AC%E5%B1%B1%E5%9F%8E%E4%B8%8B%E7%94%BA+Inuyama,+Aichi+484-0083%E6%97%A5%E6%9C%AC/%E6%97%A5%E6%9C%AC%E5%B2%90%E9%98%9C%E7%B8%A3%E9%AB%98%E5%B1%B1%E5%B8%82+Hanasatomachi,+4+Chome%E2%88%92%EF%BC%97%EF%BC%95%E7%95%AA%E5%9C%B0%EF%BC%93+%E3%83%9B%E3%83%86%E3%83%AB%E3%82%A2%E3%83%9E%E3%83%8D%E3%82%AF%E9%A3%9B%E9%A8%A8%E9%AB%98%E5%B1%B1/@35.6548584,136.3678403,9z/am=t/data=!4m18!4m17!1m5!1m1!1s0x60030f11aa5f8fe5:0x2646d20f043a3ed8!2m2!1d136.93944!2d35.383611!1m5!1m1!1s0x6002bb80c5e96551:0x44a1e8601d84b243!2m2!1d137.2527336!2d36.1390468!2m3!6e0!7e2!8j1766587260!3e3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "17:13", title: "抵達高山 & Check-in", type: "stay", desc: "HOTEL AMANEK Hida Takayama", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=HOTEL+AMANEK+Hida+Takayama" },
-                { 
-                    type: "choice", 
+                { type: "choice", 
                     dayKey: "day3",
                     time: "19:30",
                     title: "晚餐選擇",
@@ -455,8 +454,7 @@
                 title: "高山朝市、老街與酒造巡禮", 
                 events: [
                 { time: "08:00", title: "宮川朝市", type: "spot", desc: "逛早市、買農產品", icon: "fa-carrot", link: "https://www.google.com/maps/search/?api=1&query=Miyagawa+Morning+Market" },
-                { 
-                    time: "08:45", 
+                { time: "08:45", 
                     title: "朝市點心巡禮", 
                     type: "grid", 
                     layout: "grid", 
@@ -469,8 +467,7 @@
                 },
                 { time: "09:00", title: "アンデルセン (Andersen)", type: "food", desc: "購買著名的紅豆可頌，作為明日前往富山的早餐", icon: "fa-bread-slice", link: "https://www.google.com/maps/search/?api=1&query=Andersen+Takayama", image: "https://i.meee.com.tw/mXii4Ny.jpg" },
                 { time: "09:45", title: "櫻山八幡宮", type: "spot", desc: "高山祭的主祭神社，幽靜莊嚴", icon: "fa-torii-gate", link: "https://www.google.com/maps/place/%E6%AB%BB%E5%B1%B1%E5%85%AB%E5%B9%A1%E5%AE%AE/@36.1434557,137.2573388,16.17z/data=!4m6!3m5!1s0x6002bad3d5bedf79:0xf220fbcec6b526e8!8m2!3d36.148445!4d137.2608132!16s%2Fg%2F1234ndzj?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
-                { 
-                    time: "11:15", 
+                { time: "11:15", 
                     title: "飛驒高山老街 (三町通)", 
                     type: "grid", 
                     layout: "grid", 
@@ -486,8 +483,7 @@
                 { time: "15:00", title: "キッセ・キッセ (Kisse Kisse)", type: "food", desc: "法式吐司及手沖單品咖啡 (極有可能公休)", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=Kisse+Kisse+Takayama", image: "https://i.meee.com.tw/avGNUKv.jpg" },
                 { time: "16:00", title: "傳谷 (でんたに)", type: "food", desc: "在地麵包西餅店，推薦好吃飯糰、紅豆奶油麵包與雞蛋熱狗堡", icon: "fa-bread-slice", link: "https://www.google.com/maps/place/%E5%82%B3%E8%B0%B7%EF%BC%88%E3%81%A7%E3%82%93%E3%81%9F%E3%81%AB%EF%BC%89/@36.1401398,137.2578574,20z/data=!4m6!3m5!1s0x6002bb3dc96f3f2b:0x3235a47640e352af!8m2!3d36.1401398!4d137.2578574!16s%2Fg%2F11scrdlvm9?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/TcoUU9E.jpg" },
                 { time: "16:30", title: "高山陣屋", type: "spot", desc: "江戶時代官府", icon: "fa-landmark", link: "https://www.google.com/maps/search/?api=1&query=Takayama+Jinya" },
-                { 
-                    type: "choice", 
+                { type: "choice", 
                     dayKey: "day4",
                     time: "18:00",
                     title: "晚餐選擇",
@@ -500,15 +496,14 @@
             { 
                 day: 5, 
                 date: "12/26 (五)", 
-                title: "前往富山、冰見:立山絕景與冰見寒鰤", 
+                title: "雨晴立山絕景與冰見寒鰤", 
                 events: [
                 { time: "07:40", title: "高山 → 富山", type: "transport", desc: "搭乘 JR 高山本線前往富山", icon: "fa-train", link: "https://www.google.com/maps/dir/%E9%AB%98%E5%B1%B1%E5%B8%82+%E6%97%A5%E6%9C%AC%E5%B2%90%E9%98%9C%E7%B8%A3/%E6%97%A5%E6%9C%AC%E5%AF%8C%E5%B1%B1%E7%B8%A3%E5%AF%8C%E5%B1%B1%E5%B8%82+Meirincho,+1,+%E5%AF%8C%E5%B1%B1/@36.44244,136.739704,10z/am=t/data=!4m18!4m17!1m5!1m1!1s0x6002a342a14fc349:0xd4f2fb84f0b8e3dc!2m2!1d137.252159!2d36.1461317!1m5!1m1!1s0x5ff7909c5b203e79:0xfd2e8dbcd4fdb276!2m2!1d137.2126258!2d36.7018268!2m3!6e0!7e2!8j1766734800!3e3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "10:05", title: "抵達富山 & 寄放行李", type: "stay", desc: "富山車站內寄放", icon: "fa-suitcase", link: "https://www.google.com/maps/place/%E5%AF%8C%E5%B1%B1/@36.6982846,137.2098071,16.75z/data=!4m6!3m5!1s0x5ff7909c5b203e79:0xfd2e8dbcd4fdb276!8m2!3d36.7018268!4d137.2126258!16s%2Fm%2F025zfy3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "10:30", title: "星巴克 富山環水公園店", type: "spot", desc: "世界最美星巴克之一", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=Starbucks+Kansui+Park" },
                 { time: "11:30", title: "富山市玻璃美術館", type: "spot", desc: "隈研吾設計建築，欣賞玻璃藝術", icon: "fa-gem", link: "https://www.google.com/maps/search/?api=1&query=Toyama+Glass+Art+Museum" },
                 { time: "12:15", title: "バンブス (Bambus)", type: "food", desc: "麵包種類豐富，從硬麵包到當地特色鹹麵包，應有盡有。牛奶奶油三明治最美味。", icon: "fa-bread-slice", link: "https://www.google.com/maps/place/%E3%83%90%E3%83%B3%E3%83%96%E3%82%B9/@36.6889573,137.2162459,18z/data=!4m6!3m5!1s0x5ff7908adc153fe5:0xc6a66f7e5517d7c7!8m2!3d36.6892057!4d137.2172072!16s%2Fg%2F1tctfg3b?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/kPZsvOZ.jpg" },
-                { 
-                    type: "choice", 
+                { type: "choice", 
                     dayKey: "day5Lunch",
                     time: "13:00",
                     title: "午餐選擇",
@@ -521,8 +516,7 @@
                 { time: "15:30", title: "雨晴海岸", type: "spot", desc: "眺望立山連峰的絕景", icon: "fa-camera", link: "https://www.google.com/maps/search/?api=1&query=Amaharashi+Coast" },
                 { time: "16:43", title: "前往冰見住宿", type: "transport", desc: "JR冰見線或計程車前往海風", icon: "fa-taxi", link: "https://www.google.com/maps/dir/%E9%9B%A8%E6%99%B4+Shibuya,+Takaoka,+Toyama+933-0136%E6%97%A5%E6%9C%AC/%E6%B5%B7%E9%A2%A8%E3%80%9Cnami+no+oto%E3%80%9C/@36.8342006,136.991725,14z/am=t/data=!4m18!4m17!1m5!1m1!1s0x5ff7769d33853ea1:0xa94c3a8ee9881657!2m2!1d137.0374292!2d36.8164932!1m5!1m1!1s0x5ff773ebb32cbc75:0x3f14d288d1029e2d!2m2!1d136.9922816!2d36.8509724!2m3!6e0!7e2!8j1766767380!3e3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "17:15", title: "Check-in: 海風〜nami no oto〜", type: "stay", desc: "冰見海景民宿", icon: "fa-bed", link: "https://www.google.com/maps/place/%E6%B5%B7%E9%A2%A8%E3%80%9Cnami+no+oto%E3%80%9C/@36.8500122,136.9865966,15.5z/data=!4m14!1m7!3m6!1s0x5ff773ebb32cbc75:0x3f14d288d1029e2d!2z5rW36aKo44CcbmFtaSBubyBvdG_jgJw!8m2!3d36.8509456!4d136.9921995!16s%2Fg%2F11y22c_zq4?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
-                { 
-                    type: "choice", 
+                { type: "choice", 
                     dayKey: "day5",
                     time: "18:30",
                     title: "晚餐選擇",
@@ -535,14 +529,14 @@
             { 
                 day: 6, 
                 date: "12/27 (六)", 
-                title: "前往白川: 童話世界合掌村", 
+                title: "童話世界白川合掌村", 
                 events: [
                 { time: "08:16", title: "冰見→ 白川鄉", type: "transport", desc: "搭乘高速巴士直達金澤", icon: "fa-bus", link: "https://www.google.com/maps/dir/%E6%97%A5%E6%9C%AC%E3%80%92935-0014+Toyama,+Himi,+Jizomachi,+14%E2%88%923+%E6%B5%B7%E9%A2%A8%E3%80%9Cnami+no+oto%E3%80%9C/%E6%97%A5%E6%9C%AC%E5%B2%90%E9%98%9C%E7%B8%A3%E7%99%BD%E5%B7%9D%E6%9D%91+Ogimachi,+%E6%BF%83%E9%A3%9B%E9%AB%98%E9%80%9F%E5%B7%B4%E5%A3%AB%E7%99%BD%E5%B7%9D%E9%84%89%E7%AB%99/@36.5569772,136.6004002,10z/am=t/data=!4m19!4m18!1m5!1m1!1s0x5ff773ebb32cbc75:0x3f14d288d1029e2d!2m2!1d136.9922816!2d36.8509724!1m5!1m1!1s0x5ff871bf73091d2b:0x8bf8ff172aba4875!2m2!1d136.9068379!2d36.2619348!2m4!4e4!6e0!7e2!8j1766823300!3e3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "11:00", title: "抵達白川鄉", type: "spot", desc: "世界遺產合掌村散策", icon: "fa-snowflake", link: "https://www.google.com/maps/place/%E6%BF%83%E9%A3%9B%E9%AB%98%E9%80%9F%E5%B7%B4%E5%A3%AB%E7%99%BD%E5%B7%9D%E9%84%89%E7%AB%99/@36.2598685,136.9039391,17z/data=!4m15!1m8!3m7!1s0x5ff8707e4843cc7f:0x56043544d4617173!2z5pel5pys5bKQ6Zic57ij5aSn6YeO6YOh55m95bed5p2R!3b1!8m2!3d36.2710289!4d136.8985744!16zL20vMDMyZGN0!3m5!1s0x5ff871bf73091d2b:0x8bf8ff172aba4875!8m2!3d36.2619463!4d136.9068852!16s%2Fg%2F11c1s537rk?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "12:30", title: "午餐: たなか屋 (Tanaka-ya)", type: "food", desc: "品嚐在地蕎麥麵與鄉土料理", icon: "fa-utensils", link: "https://www.google.com/maps/place/Tanaka-ya/@36.2583516,136.9065519,17z/data=!3m1!4b1!4m6!3m5!1s0x5ff871bbea4f3923:0x9af7070cd011ddad!8m2!3d36.258349!4d136.908083!16s%2Fg%2F1vfp81jb?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/kzQlvA7.jpg" },
                 { time: "14:00", title: "下午茶: 落人 (Ochudo)", type: "food", desc: "圍坐在傳統的下沉式火爐（irori）旁喝白玉紅豆湯", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=Ochudo+Shirakawago", image: "https://i.meee.com.tw/n9BsjN3.jpg" },
                 { time: "15:10", title: "白川鄉 → 金澤", type: "transport", desc: "搭乘高速巴士直達金澤", icon: "fa-bus", link: "https://www.google.com/maps/dir/%E6%BF%83%E9%A3%9B%E9%AB%98%E9%80%9F%E5%B7%B4%E5%A3%AB%E7%99%BD%E5%B7%9D%E9%84%89%E7%AB%99+%E6%97%A5%E6%9C%AC%E3%80%92501-5627+Gifu,+Ono+District,+Shirakawa,+Ogimachi,+1086/%E9%87%91%E6%B2%A2%E9%A7%85+%E6%97%A5%E6%9C%AC%E3%80%92920-0858+Ishikawa,+Kanazawa,+Kinoshinbomachi,+1%E7%95%AA1%E5%8F%B7/@36.5022684,136.6001825,10z/am=t/data=!4m18!4m17!1m5!1m1!1s0x5ff871bf73091d2b:0x8bf8ff172aba4875!2m2!1d136.9068379!2d36.2619348!1m5!1m1!1s0x5ff8336336e8909d:0xc264906f3531d044!2m2!1d136.6480572!2d36.5780518!2m3!6e0!7e2!8j1766848200!3e3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
-                { time: "16:35", title: "抵達金澤站", type: "transport", desc: "前往飯店 Check-in", icon: "fa-map-pin", link: "https://www.google.com/maps/place/%E9%87%91%E6%BE%A4/@36.5776879,136.6471998,18.33z/data=!4m6!3m5!1s0x5ff8334203bb8605:0x5d5df6011ebba7ea!8m2!3d36.5780443!4d136.6481714!16zL20vMGZ3bnZr?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+                { time: "16:35", title: "抵達金澤站", type: "transport", desc: "北陸的文化重鎮，江戶時代歷史風情", icon: "fa-map-pin", link: "https://www.google.com/maps/place/%E9%87%91%E6%BE%A4/@36.5776879,136.6471998,18.33z/data=!4m6!3m5!1s0x5ff8334203bb8605:0x5d5df6011ebba7ea!8m2!3d36.5780443!4d136.6481714!16zL20vMGZ3bnZr?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "16:50", title: "SAKE食堂 by 農口尚彦研究所", type: "food", desc: "日本釀酒大神農口尚彦擔任釀酒人，品嚐榮獲金賞的名酒 (位於金澤車站旁)", icon: "fa-wine-glass", link: "https://www.google.com/maps/place/SAKE%E9%A3%9F%E5%A0%82+by+%E8%BE%B2%E5%8F%A3%E5%B0%9A%E5%BD%A6%E7%A0%94%E7%A9%B6%E6%89%80/@36.5759633,136.6497717,16.5z/data=!3m1!5s0x5ff83341f0c10005:0x3ac905d70c857e80!4m6!3m5!1s0x5ff8330063842cc5:0x9f96679c67cf1e34!8m2!3d36.5784169!4d136.6474419!16s%2Fg%2F11vqdl0npz?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/gh0IxnJ.jpg" },
                 { time: "17:30", title: "Check-in", type: "stay", desc: "清蓮 Le Lotus Bleu (金澤)", icon: "fa-bed", link: "https://www.google.com/maps/search/?api=1&query=Le+Lotus+Bleu+Kanazawa" },
                 { time: "19:30", title: "晚餐: 能登牛燒肉 味道苑 大手町(Midouen)", type: "food", desc: "品嚐頂級能登牛燒肉", icon: "fa-utensils", link: "https://www.google.com/maps/place/Midouen/@36.5686093,136.6547276,14.88z/data=!4m6!3m5!1s0x5ff83376d8e98d3b:0x5edec75734796297!8m2!3d36.5695417!4d136.6609552!16s%2Fg%2F1tj7w71s?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/chX4pvV.jpg" }
@@ -567,13 +561,12 @@
             { 
                 day: 8, 
                 date: "12/29 (一)", 
-                title: "金澤武士與返程", 
+                title: "金澤江戶茶屋文化", 
                 events: [
                 { time: "09:00", title: "金澤屋咖啡店 本店", type: "food", desc: "大正浪漫風格，自家烘焙與金箔咖啡", icon: "fa-mug-hot", link: "https://www.google.com/maps/place/%E9%87%91%E6%BE%A4%E5%B1%8B%E5%92%96%E5%95%A1%E5%BA%97+%E6%9C%AC%E5%BA%97/@36.5697056,136.6566439,17.29z/data=!4m6!3m5!1s0x5ff8337750a594c5:0x60ecd23b2063176!8m2!3d36.5686496!4d136.6584936!16s%2Fg%2F1hc305gtg?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/zq7xmJA.jpg" },
                 { time: "10:00", title: "金澤市老舖紀念館", type: "spot", desc: "體驗江戶時代藥商風情", icon: "fa-landmark", link: "https://www.google.com/maps/place/%E9%87%91%E6%BE%A4%E5%B8%82%E8%80%81%E8%88%96%E7%B4%80%E5%BF%B5%E9%A4%A8/@36.5633468,136.653777,17.25z/data=!4m6!3m5!1s0x5ff834802577a5e9:0xcc9e1a94b2d4863a!8m2!3d36.5626428!4d136.6503571!16s%2Fg%2F1td47v0k?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "10:30", title: "長町武家屋敷跡", type: "spot", desc: "武士住宅區", icon: "fa-house-chimney-user", link: "https://www.google.com/maps/search/?api=1&query=Nagamachi+Bukeyashiki" },
-                { 
-                    type: "choice", 
+                { type: "choice", 
                     dayKey: "day8",
                     time: "11:00",
                     title: "午餐選擇",
@@ -642,9 +635,21 @@
                 date: "12/31 (三)", 
                 title: "回程", 
                 events: [
-                { time: "12:00", title: "午餐: 燒肉&手打ち冷麵 二郎 錦店", type: "food", desc: "最後一餐，大推招牌冷麵", icon: "fa-utensils", link: "https://www.google.com/maps/place/Yakiniku+Jiro+Nishiki/@35.1702704,136.9004331,17z/data=!3m1!5s0x600370d52b895d07:0xca92caa922f9c713!4m16!1m9!3m8!1s0x600371ba638f0c3b:0xdbdc4d526a60cb4c!2sYakiniku+Jiro+Nishiki!8m2!3d35.170266!4d136.903008!9m1!1b1!16s%2Fg%2F11s_zfp3z6!3m5!1s0x600371ba638f0c3b:0xdbdc4d526a60cb4c!8m2!3d35.170266!4d136.903008!16s%2Fg%2F11s_zfp3z6?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/b54Kxu2.jpg" },
-                { time: "15:30", title: "前往機場", type: "transport", desc: "名鐵 μ-SKY", icon: "fa-train" },
-                { time: "19:40", title: "搭機返台", type: "transport", desc: "台灣虎航 IT269", icon: "fa-plane" }
+                { type: "choice", 
+                    dayKey: "day10",
+                    time: "12:00",
+                    title: "最後的午餐選擇",
+                    options: [
+                        { id: "option1", name: "燒肉&手打ち冷麵 二郎 錦店", desc: "CP值高的A5和牛以及網友推薦招牌冷麵", price: 3000, link: "https://www.google.com/maps/place/Yakiniku+Jiro+Nishiki/@35.1702704,136.9004331,17z/data=!3m1!5s0x600370d52b895d07:0xca92caa922f9c713!4m16!1m9!3m8!1s0x600371ba638f0c3b:0xdbdc4d526a60cb4c!2sYakiniku+Jiro+Nishiki!8m2!3d35.170266!4d136.903008!9m1!1b1!16s%2Fg%2F11s_zfp3z6!3m5!1s0x600371ba638f0c3b:0xdbdc4d526a60cb4c!8m2!3d35.170266!4d136.903008!16s%2Fg%2F11s_zfp3z6?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/b54Kxu2.jpg" },
+                        { id: "option2", name: "まるや本店 JR名古屋駅店", desc: "無敵爆炸好吃的名古屋鰻魚三吃", price: 4650, link: "https://www.google.com/maps/place/Maruya+Honten+-+JR+Nagoya+Station/@35.1689322,136.8815878,16z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x600376e79145cc0d:0x26e0b2d82077812a!8m2!3d35.1690306!4d136.8818247!16s%2Fg%2F11cm68kn26?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/GoknMWi.jpg" },
+                        { id: "option3", name: "雅じゃぽ 名古屋駅前シンフォニー豊田ビル店(Gajapo)", desc: "肉質鮮嫩，醬汁濃鬱的和牛三食", price: 2790, link: "https://www.google.com/maps/place/Gajapo/@35.1697731,136.8864928,16z/data=!3m1!5s0x600376dc2049e241:0x2bd28652c4cfaff8!4m6!3m5!1s0x600376de99987ed1:0x4ac56f331b09ef23!8m2!3d35.1698549!4d136.886586!16s%2Fg%2F11c5hkbk9t?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/uC7AulD.jpg" },
+                        { id: "option4", name: "人形町今半 名古屋ミッドランドスクエア店", desc: "最高等級的日本產黑毛和牛壽喜燒名店", price: 14300, link: "https://www.google.com/maps/place/Ningyocho+Imahan+Nagoya+Midland+Square/@35.1702853,136.8852008,16z/data=!4m6!3m5!1s0x600376ddc7c41671:0xd2f0f93b5ffff893!8m2!3d35.1702853!4d136.8852008!16s%2Fg%2F1tjl5vfg?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/TDnDtIV.jpg" }
+                    ]
+                },
+                { time: "15:41", title: "前往機場", type: "transport", desc: "名鐵 μ-SKY", icon: "fa-train", link: "https://www.google.com/maps/dir/%E3%82%B3%E3%83%B3%E3%83%91%E3%82%B9%E3%83%9B%E3%83%86%E3%83%AB%E5%90%8D%E5%8F%A4%E5%B1%8B/%E4%B8%AD%E9%83%A8%E5%9C%8B%E9%9A%9B%E6%A9%9F%E5%A0%B4+1+Chome-%EF%BC%91%E7%95%AA%E5%9C%B0+Centrair,+Tokoname,+Aichi+479-0881%E6%97%A5%E6%9C%AC/@35.0130521,136.6993396,11z/am=t/data=!4m18!4m17!1m5!1m1!1s0x600376d930c75735:0xd236f60205e88930!2m2!1d136.8888034!2d35.1689575!1m5!1m1!1s0x60047d8e11d6d945:0xdf2836921a82ba79!2m2!1d136.8163834!2d34.8592566!2m3!6e0!7e2!8j1767195660!3e3?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+                { time: "19:40", title: "搭機返台", type: "transport", desc: "台灣虎航 IT269", icon: "fa-plane", link: "https://www.google.com/maps/place/%E7%89%B9%E7%94%A2%E9%A4%A8+%E7%AC%AC2%E8%88%AA%E5%BB%88%E5%BA%97/@34.8558351,136.8156643,18.25z/data=!3m1!5s0x60047d84d9ce3f41:0x3257ceb0df810e5!4m6!3m5!1s0x60047dba64431761:0x64b243085fef3805!8m2!3d34.8553959!4d136.8160882!16s%2Fg%2F11h4ydwc5v?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+                { time: "22:35", title: "抵達高雄國際機場", type: "transport", desc: "小港機場", icon: "fa-passport", link: "https://www.google.com/maps/place/%E9%AB%98%E9%9B%84%E5%9C%8B%E9%9A%9B%E6%A9%9F%E5%A0%B4/@22.5749382,120.3445795,17z/data=!3m1!4b1!4m6!3m5!1s0x346e1cce3ff6bb99:0x1ceaaec46945d129!8m2!3d22.5749333!4d120.3471544!16zL20vMDMyZGN0?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+                { time: "23:15", title: "搭乘預約接駁車", type: "transport", desc: "隨航班時間調整", icon: "fa-bus" }
             ]}
         ];
 
@@ -652,8 +657,10 @@
             // Nagoya
             { name: "コーヒーハウス かこ", type: "sweet", city: "nagoya", desc: "小倉吐司", link: "https://www.google.com/maps/search/?api=1&query=Coffee+House+Kako" },
             { name: "熱田蓬萊軒", type: "main", city: "nagoya", desc: "鰻魚飯三吃", link: "https://www.google.com/maps/place/%E7%86%B1%E7%94%B0%E8%93%AC%E8%90%8A%E8%BB%92+%E6%9C%AC%E5%BA%97/@35.1208881,136.9041755,16.29z/data=!4m6!3m5!1s0x60037a1f59111225:0xdfdb07cec1b190d6!8m2!3d35.1201689!4d136.9068979!16s%2Fg%2F1vljg7yn?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "まるや本店 JR名古屋駅店", type: "main", city: "nagoya", desc: "鰻魚飯三吃，醬汁甜鹹平衡", link: "https://www.google.com/maps/place/Maruya+Honten+-+JR+Nagoya+Station/@35.170232,136.8847376,16.5z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x600376e79145cc0d:0x26e0b2d82077812a!8m2!3d35.1690306!4d136.8818247!16s%2Fg%2F11cm68kn26?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "仙石すし 本店", type: "main", city: "nagoya", desc: "厚切壽司", link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi" },
             { name: "麵家獅子丸", type: "main", city: "nagoya", desc: "雞白湯拉麵", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" },
+            { name: "雅じゃぽ 名古屋駅前シンフォニー豊田ビル店(Gajapo)", type: "main", city: "nagoya", desc: "和牛三食", link: "https://www.google.com/maps/place/Gajapo/@35.170232,136.8847376,16.5z/data=!3m1!5s0x600376dc2049e241:0x2bd28652c4cfaff8!4m6!3m5!1s0x600376de99987ed1:0x4ac56f331b09ef23!8m2!3d35.1698549!4d136.886586!16s%2Fg%2F11c5hkbk9t?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "カツレツMATUMURA", type: "main", city: "nagoya", desc: "中日大樓炸里肌豬排", link: "https://www.google.com/maps/place/%E3%82%AB%E3%83%84%E3%83%AC%E3%83%84MATUMURA+bis+CHUNICHI+BUILDNG+(%E3%83%9E%E3%83%84%E3%83%A0%E3%83%A0%E3%83%A9)+%E4%B8%AD%E6%97%A5%E3%83%93%E3%83%AB/@35.1684205,136.9000343,16z/data=!3m1!5s0x600370d1079468f7:0xd5cac200e2569c2f!4m6!3m5!1s0x600371002136925b:0x1fcd87ee4ab4920!8m2!3d35.1685893!4d136.9095615!16s%2Fg%2F11vrt0580h?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "ぴよりんshop", type: "sweet", city: "nagoya", desc: "超萌小雞蛋糕", link: "https://www.google.com/maps/place/Piyorin+Shop/@35.1704637,136.8831953,18.75z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x600377134cf13ea5:0x7d5ed9e5ae4c790a!8m2!3d35.1702467!4d136.8829448!16s%2Fg%2F11n0rffl_j?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "艾許奶油 Échiré Nagoya", type: "sweet", city: "nagoya", desc: "法國頂級奶油甜點", link: "https://www.google.com/maps/place/%E8%89%BE%E8%A8%B1%E5%A5%B6%E6%B2%B9+%C3%89chir%C3%A9+Nagoya/@35.1690408,136.8828052,17z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x6003771b980d0c31:0x297e966cd689def8!8m2!3d35.1714232!4d136.8827795!16s%2Fg%2F11mb_rjw6w?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
@@ -663,6 +670,7 @@
             { name: "鳴門鯛燒本舖", type: "sweet", city: "nagoya", desc: "天然一丁燒", link: "https://www.google.com/maps/place/Naruto+Taiyaki+Honpo/@35.1582373,136.9018442,17z/data=!4m14!1m7!3m6!1s0x6003719ca25193a9:0x3eabfe76576f6fb7!2sNaruto+Taiyaki+Honpo!8m2!3d35.1582329!4d136.9044191!16s%2Fg%2F11gjs95trd?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "馬喰一代 名古屋EAST", type: "main", city: "nagoya", desc: "飛驒牛燒肉", link: "https://www.google.com/maps/place/%E7%87%92%E8%82%89+%E9%A6%AC%E5%96%B0%E4%B8%80%E4%BB%A3+%E5%90%8D%E5%8F%A4%E5%B1%8BEAST/@35.1677589,136.8955884,14.5z/data=!3m1!5s0x600376c29537a145:0xcd6379af050f0486!4m6!3m5!1s0x600376c295247155:0x2e73822e81245bff!8m2!3d35.1743119!4d136.8846123!16s%2Fg%2F11gbl36pdj?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "燒肉&手打ち冷麵 二郎 錦店", type: "main", city: "nagoya", desc: "A5和牛定食&招牌冷麵", link: "https://www.google.com/maps/place/Yakiniku+Jiro+Nishiki/@35.1679046,136.9042507,15.75z/data=!3m1!5s0x600370d52b895d07:0xca92caa922f9c713!4m6!3m5!1s0x600371ba638f0c3b:0xdbdc4d526a60cb4c!8m2!3d35.170266!4d136.903008!16s%2Fg%2F11s_zfp3z6?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "人形町今半 名古屋ミッドランドスクエア店", type: "main", city: "nagoya", desc: "黑毛和牛壽喜燒名店", link: "https://www.google.com/maps/place/Ningyocho+Imahan+Nagoya+Midland+Square/@35.170232,136.8847376,16.5z/data=!3m1!5s0x600376ddb8f85415:0x2bd28652afeb7cbb!4m6!3m5!1s0x600376ddc7c41671:0xd2f0f93b5ffff893!8m2!3d35.1702853!4d136.8852008!16s%2Fg%2F1tjl5vfg?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "ふみ屋", type: "main", city: "nagoya", desc: "居酒屋", link: "https://www.google.com/maps/search/?api=1&query=Fumiya+Nishiki" },
             { name: "つばめパン＆Milk", type: "sweet", city: "nagoya", desc: "天然酵母吐司", link: "https://www.google.com/maps/place/Tsubame+Bread+%26+Milk/@35.168593,136.884341,17z/data=!3m2!4b1!5s0x600376deeab9380d:0xd7e07c212417ba49!4m6!3m5!1s0x6003779c0c667e25:0x751d9502b2a24446!8m2!3d35.1685886!4d136.8869159!16s%2Fg%2F11n85ysq8s?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "千里馬藥局", type: "sweet", city: "nagoya", desc: "大型藥妝店", link: "https://www.google.com/maps/place/%E5%8D%83%E9%87%8C%E9%A6%AC%E8%97%A5%E5%B1%8B/@35.1677588,136.8783993,16z/data=!4m6!3m5!1s0x600376e6fe095555:0x835be5a4f8904eb5!8m2!3d35.1689651!4d136.8809567!16s%2Fg%2F1tjcpcks?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
@@ -738,13 +746,14 @@
             const day5ChoiceCost = COSTS.OPTIONS.day5[userChoices.day5];
             const day5LunchChoiceCost = COSTS.OPTIONS.day5Lunch[userChoices.day5Lunch];
             const day8ChoiceCost = COSTS.OPTIONS.day8[userChoices.day8];
+            const day10ChoiceCost = COSTS.OPTIONS.day10[userChoices.day10];
 
             totalDiningJPY += day3ChoiceCost;
             totalDiningJPY += day4ChoiceCost;
             totalDiningJPY += day5ChoiceCost;
             totalDiningJPY += day5LunchChoiceCost;
-
             totalDiningJPY += day8ChoiceCost;
+            totalDiningJPY += day10ChoiceCost;
             
             const totalDining = GROUP_SIZE * totalDiningJPY * JPY_TWD_RATE;
 

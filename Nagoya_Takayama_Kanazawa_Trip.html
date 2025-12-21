@@ -17,11 +17,16 @@
             background-color: #F8FAFC; /* Light Gray */
             color: #334155; /* Slate */
         }
+        /* Fix: Force scrollbar to prevent horizontal jump */
+        html { 
+            scroll-behavior: smooth; 
+            overflow-y: scroll; /* 傳統相容性寫法 */
+            scrollbar-gutter: stable; /* 現代瀏覽器防跳動專用寫法 */
+        }
+
         .theme-teal { color: #14B8A6; }
         .bg-theme-teal { background-color: #14B8A6; }
         .border-theme-teal { border-color: #14B8A6; }
-        
-        html { scroll-behavior: smooth; }
         
         .chart-container {
             position: relative;
@@ -177,16 +182,18 @@
         </div>
 
         <div class="flex flex-wrap gap-3 mb-10 justify-center">
-            <button class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold transition bg-[#14B8A6] text-white shadow-md hover:bg-teal-600" data-filter="all">全部美食</button>
-            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="nagoya">名古屋</button>
-            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="takayama">高山</button>
-            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="toyama">富山/冰見</button>
-            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="kanazawa">金澤</button>
-            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="main">正餐/主食</button>
-            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border border-gray-300 hover:bg-teal-50" data-filter="sweet">甜點/咖啡/小吃</button>
+            <!-- Ensure borders are present in all states to prevent size jumping -->
+            <button class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold transition bg-[#14B8A6] text-white shadow-md border-2 border-[#14B8A6] hover:bg-teal-600" data-filter="all">全部美食</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border-2 border-gray-300 hover:bg-teal-50" data-filter="nagoya">名古屋</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border-2 border-gray-300 hover:bg-teal-50" data-filter="takayama">高山</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border-2 border-gray-300 hover:bg-teal-50" data-filter="toyama">富山/冰見</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border-2 border-gray-300 hover:bg-teal-50" data-filter="kanazawa">金澤</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border-2 border-gray-300 hover:bg-teal-50" data-filter="main">正餐/主食</button>
+            <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition bg-white text-gray-600 border-2 border-gray-300 hover:bg-teal-50" data-filter="sweet">甜點/咖啡/小吃</button>
         </div>
 
-        <div id="restaurant-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Added min-height to prevent vertical collapse that causes scrollbar jump -->
+        <div id="restaurant-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[500px]">
             <!-- Javascript will populate this -->
         </div>
     </section>
@@ -399,19 +406,19 @@
                 { time: "18:50", title: "抵達名古屋中部機場", type: "transport", desc: "入境手續、領取行李", icon: "fa-passport", link: "https://www.google.com/maps/place/%E4%B8%AD%E9%83%A8%E5%9C%8B%E9%9A%9B%E6%A9%9F%E5%A0%B4/@34.859261,136.8138085,17z/data=!3m1!4b1!4m6!3m5!1s0x60047d8e11d6d945:0xdf2836921a82ba79!8m2!3d34.8592566!4d136.8163834!16s%2Fg%2F120zv6p7?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "20:07", title: "搭乘名鐵前往住宿", type: "transport", desc: "名鐵 μ-SKY", icon: "fa-train", link: "https://www.google.com/maps/dir/%E4%B8%AD%E9%83%A8%E5%9C%8B%E9%9A%9B%E6%A9%9F%E5%A0%B4+1+Chome-%EF%BC%91%E7%95%AA%E5%9C%B0+Centrair,+Tokoname,+Aichi+479-0881%E6%97%A5%E6%9C%AC/%E7%AD%92%E4%BA%95%E7%94%BASTAY/@35.0186681,136.7085115,11z/am=t/data=!4m18!4m17!1m5!1m1!1s0x60047d8e11d6d945:0xdf2836921a82ba79!2m2!1d136.8163834!2d34.8592566!1m5!1m1!1s0x600371e46d2b6bfd:0x2b7c729dbc15be94!2m2!1d136.931247!2d35.1777599!2m3!6e0!7e2!8j1766434020!3e3?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "21:00", title: "飯店 Check-in", type: "stay", desc: "名古屋市筒井町 STAY", icon: "fa-bed", link: "https://www.google.com/maps/place/筒井町STAY/@35.1719656,136.9189238,15.25z/data=!4m11!3m10!1s0x600371e46d2b6bfd:0x2b7c729dbc15be94!5m4!1s2025-12-26!2i2!4m1!1i2!8m2!3d35.1777401!4d136.9312411!16s%2Fg%2F11l2q91mcm?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
-                { time: "22:00", title: "晚餐: ふみ屋 錦店", type: "food", desc: "居酒屋餐點", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋" }
+                { time: "22:00", title: "晚餐: ふみ屋 錦店", type: "food", desc: "居酒屋餐點", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=ふみ屋+錦店+名古屋", image: "https://i.meee.com.tw/iLCK2Wj.jpg" }
             ]},
             { 
                 day: 2, 
                 date: "12/23 (二)", 
                 title: "熱田神宮參拜與市區巡禮", 
                 events: [
-                { time: "08:00", title: "早餐: コーヒーハウス かこ 花車本店", type: "food", desc: "名古屋特色小倉吐司", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=コーヒーハウス+かこ+花車本店" },
+                { time: "08:00", title: "早餐: コーヒーハウス かこ 花車本店", type: "food", desc: "名古屋特色小倉吐司", icon: "fa-mug-hot", link: "https://www.google.com/maps/search/?api=1&query=コーヒーハウス+かこ+花車本店", image: "https://i.meee.com.tw/giI2AoL.jpg" },
                 { time: "09:30", title: "白鳥庭園", type: "spot", desc: "名古屋市內規模最大的日式庭園", icon: "fa-tree", link: "https://www.google.com/maps/place/%E7%99%BD%E9%B3%A5%E5%BA%AD%E5%9C%92/@35.1232233,136.9074295,16z/data=!4m6!3m5!1s0x600379f7bfe647b5:0xa0866d23ee02655!8m2!3d35.126308!4d136.9009965!16s%2Fg%2F122qgmk2?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
-                { time: "11:00", title: "熱田神宮", type: "spot", desc: "莊嚴參拜 (免門票)", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Jingu" },
-                { time: "12:00", title: "午餐: 熱田蓬萊軒", type: "food", desc: "鰻魚飯三吃", icon: "fa-utensils", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
-                { time: "15:00", title: "德川園", type: "spot", desc: "日式庭園散策", icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Tokugawaen" },
-                { time: "18:00", title: "晚餐: 麵屋獅子丸", type: "food", desc: "濃郁雞白湯拉麵", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" },
+                { time: "11:00", title: "熱田神宮", type: "spot", desc: "莊嚴參拜", icon: "fa-torii-gate", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Jingu" },
+                { time: "12:00", title: "午餐: 熱田蓬萊軒", type: "food", desc: "鰻魚飯三吃", icon: "fa-utensils", link: "https://www.google.com/maps/place/%E7%86%B1%E7%94%B0%E8%93%AC%E8%90%8A%E8%BB%92+%E6%9C%AC%E5%BA%97/@35.1208881,136.9041755,16.29z/data=!4m6!3m5!1s0x60037a1f59111225:0xdfdb07cec1b190d6!8m2!3d35.1201689!4d136.9068979!16s%2Fg%2F1vljg7yn?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/Q1h6ZFQ.jpg" },
+                { time: "15:00", title: "德川園", type: "spot", desc: "江戶時代最流行的池泉迴游式風格大名庭園", icon: "fa-tree", link: "https://www.google.com/maps/search/?api=1&query=Tokugawaen" },
+                { time: "18:00", title: "晚餐: 麵家獅子丸", type: "food", desc: "濃郁雞白湯拉麵", icon: "fa-bowl-food", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru", image: "https://i.meee.com.tw/jTQZaQp.jpg" },
                 { time: "19:30", title: "マルエイガレリア (Maruei Galleria)", type: "spot", desc: "小清新百貨，2F有無印良品，周邊有大國藥妝與唐吉訶德", icon: "fa-bag-shopping", link: "https://www.google.com/maps/place/Maruei+Galleria/@35.1686939,136.9059644,17.75z/data=!3m1!5s0x600370d244b7e583:0xa4773cc258ee3f00!4m6!3m5!1s0x6003713107df5ab9:0x58f07da91188827!8m2!3d35.1683523!4d136.9054958!16s%2Fg%2F11sqyc68b9?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" }
             ]},
             { 
@@ -419,7 +426,7 @@
                 date: "12/24 (三)", 
                 title: "犬山城古都漫遊 & 前往高山", 
                 events: [
-                { time: "08:30", title: "早餐: 7-ELEVEN", type: "food", desc: "筒井町 STAY 旁邊便利商店 (餐後退房)", icon: "fa-mug-hot", link: "https://www.google.com/maps/place/%E8%B6%85%E5%95%86+7-ELEVEN/@35.1779698,136.930956,19.83z/data=!4m6!3m5!1s0x600370e4d8a7e1f5:0xbaa1508092d19f06!8m2!3d35.1777975!4d136.9310102!16s%2Fg%2F1wk4c_3p?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+                { time: "08:30", title: "早餐: 7-ELEVEN", type: "food", desc: "筒井町 STAY 旁邊便利商店 (餐後退房)", icon: "fa-mug-hot", link: "https://www.google.com/maps/place/%E8%B6%85%E5%95%86+7-ELEVEN/@35.1779698,136.930956,19.83z/data=!4m6!3m5!1s0x600370e4d8a7e1f5:0xbaa1508092d19f06!8m2!3d35.1777975!4d136.9310102!16s%2Fg%2F1wk4c_3p?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/dXYT2Tl.jpg" },
                 { time: "09:34", title: "前往犬山城", type: "transport", desc: "搭乘地鐵與名鐵前往犬山", icon: "fa-train", link: "https://www.google.com/maps/dir/%E6%97%A5%E6%9C%AC%E3%80%92461-0003+Aichi,+Nagoya,+Higashi+Ward,+Tsutsuicho,+4+Chome%E2%88%9232+%E7%AD%92%E4%BA%95%E7%94%BASTAY/%E6%97%A5%E6%9C%AC%E6%84%9B%E7%9F%A5%E7%B8%A3%E7%8A%AC%E5%B1%B1%E5%B8%82+Inuyama,+Kitakoken+%E7%8A%AC%E5%B1%B1%E5%9F%8E/@35.2671366,136.7425829,11z/am=t/data=!4m18!4m17!1m5!1m1!1s0x600371e46d2b6bfd:0x2b7c729dbc15be94!2m2!1d136.931247!2d35.1777599!1m5!1m1!1s0x60030ef5ad48ed91:0x285afa434603f635!2m2!1d136.9391766!2d35.3883604!2m3!6e0!7e2!8j1766568840!3e3?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { time: "11:00", title: "犬山城", type: "spot", desc: "國寶五城之一", icon: "fa-chess-rook", link: "https://www.google.com/maps/search/?api=1&query=Inuyama+Castle" },
                 { 
@@ -429,7 +436,7 @@
                     layout: "grid", 
                     icon: "fa-bowl-food",
                     items: [
-                        { name: "壽俵屋 犬山庵", desc: "醬油鍋巴串與守口漬", link: "https://www.google.com/maps/place/%E5%A3%BD%E4%BF%B5%E5%B1%8B+%E7%8A%AC%E5%B1%B1%E5%BA%B5/@35.3831088,136.9387996,18.75z/data=!4m6!3m5!1s0x60030e8a55373ee5:0x2cc95c442196bead!8m2!3d35.3832586!4d136.9393081!16s%2Fg%2F1tjz7w3h?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+                        { name: "壽俵屋 犬山庵", desc: "醬油鍋巴串與守口漬", link: "https://www.google.com/maps/place/%E5%A3%BD%E4%BF%B5%E5%B1%8B+%E7%8A%AC%E5%B1%B1%E5%BA%B5/@35.3831088,136.9387996,18.75z/data=!4m6!3m5!1s0x60030e8a55373ee5:0x2cc95c442196bead!8m2!3d35.3832586!4d136.9393081!16s%2Fg%2F1tjz7w3h?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", image: "https://i.meee.com.tw/DPfGdFB.jpg" },
                         { name: "蘭丸 (Ranmaru)", desc: "人氣串燒與小吃", link: "https://www.google.com/maps/place/Ranmaru/@35.3831088,136.9387996,18.75z/data=!4m6!3m5!1s0x60030f91bb0f8bd3:0xf7e0455268adc67c!8m2!3d35.3832351!4d136.9395314!16s%2Fg%2F11k99mkqly?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                         { name: "クシカツとなまる", desc: "酥脆串炸專門店", link: "https://www.google.com/maps/place/Tonamaru/@35.3831088,136.9387996,18.75z/data=!4m6!3m5!1s0x60030f292d8712bf:0xbfbd35315d146bc2!8m2!3d35.3834274!4d136.9393891!16s%2Fg%2F11ryrdg_rc?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" }
                     ]
@@ -440,7 +447,7 @@
                     type: "choice", 
                     dayKey: "day3",
                     time: "19:30",
-                    title: "晚餐選擇 (互動式)",
+                    title: "晚餐選擇",
                     options: [
                         { id: "option1", name: "味藏天國", desc: "JA直營，飛驒牛品質保證", price: 5500, link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" },
                         { id: "option2", name: "丸明 (高山店)", desc: "老字號精肉店直營燒肉", price: 4500, link: "https://www.google.com/maps/search/?api=1&query=Maruaki+Takayama" }
@@ -488,7 +495,7 @@
                     type: "choice", 
                     dayKey: "day4",
                     time: "18:00",
-                    title: "晚餐選擇 (互動式)",
+                    title: "晚餐選擇",
                     options: [
                         { id: "option1", name: "えび八 (Ebiya)", desc: "在地人氣現炸天婦羅", price: 3000, link: "https://www.google.com/maps/search/?api=1&query=Ebiya+Takayama" },
                         { id: "option2", name: "寿美久 (Sumiku)", desc: "傳統手打蕎麥麵", price: 3000, link: "https://www.google.com/maps/search/?api=1&query=Sumiku+Takayama" }
@@ -509,7 +516,7 @@
                     type: "choice", 
                     dayKey: "day5Lunch",
                     time: "13:00",
-                    title: "午餐選擇 (互動式)",
+                    title: "午餐選擇",
                     options: [
                         { id: "option1", name: "新とんかつ (Shin Tonkatsu)", desc: "老字號日式炸豬排", price: 2000, link: "https://www.google.com/maps/place/Shin+Tonkatsu/@36.6886361,137.2111454,17.5z/data=!3m1!5s0x5ff7908a8793cf17:0xa1f51866f64fee69!4m6!3m5!1s0x5ff7908a63f855e3:0x900537d5a13c5e7!8m2!3d36.6893625!4d137.2140511!16s%2Fg%2F1tcz851s?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                         { id: "option2", name: "白えび亭 (Shiroebitei)", desc: "富山灣寶石！豪邁200隻剝殼白蝦刺身丼", price: 4800, link: "https://www.google.com/maps/place/%E5%A4%A9%E5%A9%A6%E7%BE%85+%E5%AF%8C%E5%B1%B1%E7%99%BD%E8%9D%A6%E4%BA%AD/@36.7010207,137.2140737,15z/data=!3m1!5s0x5ff7909c44b208f7:0x5e0c9e59c19c3b0!4m6!3m5!1s0x5ff7909cedc3043f:0xff6ff6357c9f6c19!8m2!3d36.7010207!4d137.2140737!16s%2Fg%2F1tlwfhfl?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" }
@@ -523,7 +530,7 @@
                     type: "choice", 
                     dayKey: "day5",
                     time: "18:30",
-                    title: "晚餐選擇 (互動式)",
+                    title: "晚餐選擇",
                     options: [
                         { id: "option1", name: "ばんや料理 ひみ浜", desc: "米其林推薦，必吃冰見寒鰤魚三吃", price: 11000, link: "https://www.google.com/maps/search/?api=1&query=Banya+Ryori+Himihama" },
                         { id: "option2", name: "亀寿し (Kame Sushi)", desc: "在地人氣壽司店，新鮮富山灣海鮮", price: 5000, link: "https://www.google.com/maps/place/Kame+Sushi/@36.8499807,136.9855586,15z/data=!4m6!3m5!1s0x5ff773d19ae0de3b:0x6dca221d3bfeff51!8m2!3d36.851879!4d136.986278!16s%2Fg%2F1tdcg6gq?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" }
@@ -574,7 +581,7 @@
                     type: "choice", 
                     dayKey: "day8",
                     time: "11:00",
-                    title: "午餐選擇 (互動式)",
+                    title: "午餐選擇",
                     options: [
                         { id: "option1", name: "お多福 長町店", desc: "百年大眾食堂，必吃烏龍麵與蓋飯", price: 1800, link: "https://www.google.com/maps/place/Otafuku+nagamachi/@36.5653879,136.6507007,16.5z/data=!4m6!3m5!1s0x5ff8337c3d3eb2e5:0x8f2ad40e5d5f5f3!8m2!3d36.5663046!4d136.6507459!16s%2Fg%2F1tf317mb?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                         { id: "option2", name: "能加万菜 と成屋", desc: "喉黑魚釜飯專門店", price: 3850, link: "https://www.google.com/maps/place/Noukabanzai+Tonariya+Nodoguro+Rice+Pot+Specialty+Restaurant/@36.5708493,136.6560335,18z/data=!3m1!5s0x5ff8336edc201263:0x4885cf7d395b2eb4!4m6!3m5!1s0x5ff8333fb396310b:0x72b632deece18fce!8m2!3d36.5708493!4d136.6560335!16s%2Fg%2F11ny18ndqv?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" }
@@ -593,7 +600,7 @@
                 date: "12/30 (二)", 
                 title: "名古屋市區與購物", 
                 events: [
-                { time: "09:30", title: "ぴよりんshop (Piyorin Shop)", type: "food", desc: "名古屋超人氣小雞布丁蛋糕", icon: "fa-cookie", link: "https://www.google.com/maps/place/Piyorin+Shop/@35.1704637,136.8831953,18.75z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x600377134cf13ea5:0x7d5ed9e5ae4c790a!8m2!3d35.1702467!4d136.8829448!16s%2Fg%2F11n0rffl_j?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+                { time: "09:00", title: "ぴよりんshop (Piyorin Shop)", type: "food", desc: "名古屋超人氣小雞布丁蛋糕", icon: "fa-cookie", link: "https://www.google.com/maps/place/Piyorin+Shop/@35.1704637,136.8831953,18.75z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x600377134cf13ea5:0x7d5ed9e5ae4c790a!8m2!3d35.1702467!4d136.8829448!16s%2Fg%2F11n0rffl_j?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
                 { 
                     time: "10:00", 
                     title: "名古屋車站周邊購物與伴手禮", 
@@ -631,7 +638,7 @@
                     icon: "fa-cart-shopping",
                     items: [
                         { name: "千里馬藥局", desc: "多層樓大型藥妝店，價格實惠", link: "https://www.google.com/maps/place/%E5%8D%83%E9%87%8C%E9%A6%AC%E8%97%A5%E5%B1%8B/@35.1677588,136.8783993,16z/data=!4m6!3m5!1s0x600376e6fe095555:0x835be5a4f8904eb5!8m2!3d35.1689651!4d136.8809567!16s%2Fg%2F1tjcpcks?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
-                        { name: "ダイコクドラッグ (大國藥妝)", desc: "名古屋新幹線口店，特價商品多", link: "https://www.google.com/maps/place/%E3%83%80%E3%82%A4%E3%82%B3%E3%82%AF%E3%83%89%E3%83%A9%E3%83%83%E3%82%B0%E5%90%8D%E5%8F%A4%E5%B1%8B%E6%96%B0%E5%B9%B9%E7%B7%9A%E5%8F%A3%E5%BA%97/@35.1677588,136.8783993,16z/data=!4m6!3m5!1s0x6003770e6d4c4e65:0x2cfdea6866d1132f!8m2!3d35.1715573!4d136.8786935!16s%2Fg%2F11yhrz0byr?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" }
+                        { name: "ダイコクドラッグ (大國藥妝)", desc: "名古屋新幹線口店，特價商品多", link: "https://www.google.com/maps/place/%E3%83%80%E3%82%A4%E3%82%B3%E3%82%AF%E3%83%89%E3%83%A9%E3%83%A3%E3%82%B0%E5%90%8D%E5%8F%A4%E5%B1%8B%E6%96%B0%E5%B9%B9%E7%B7%9A%E5%8F%A3%E5%BA%97/@35.1677588,136.8783993,16z/data=!4m6!3m5!1s0x6003770e6d4c4e65:0x2cfdea6866d1132f!8m2!3d35.1715573!4d136.8786935!16s%2Fg%2F11yhrz0byr?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" }
                     ]
                 }
             ]},
@@ -649,18 +656,21 @@
         const restaurants = [
             // Nagoya
             { name: "コーヒーハウス かこ", type: "sweet", city: "nagoya", desc: "小倉吐司", link: "https://www.google.com/maps/search/?api=1&query=Coffee+House+Kako" },
-            { name: "熱田蓬萊軒", type: "main", city: "nagoya", desc: "鰻魚飯三吃", link: "https://www.google.com/maps/search/?api=1&query=Atsuta+Houraiken" },
+            { name: "熱田蓬萊軒", type: "main", city: "nagoya", desc: "鰻魚飯三吃", link: "https://www.google.com/maps/place/%E7%86%B1%E7%94%B0%E8%93%AC%E8%90%8A%E8%BB%92+%E6%9C%AC%E5%BA%97/@35.1208881,136.9041755,16.29z/data=!4m6!3m5!1s0x60037a1f59111225:0xdfdb07cec1b190d6!8m2!3d35.1201689!4d136.9068979!16s%2Fg%2F1vljg7yn?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "仙石すし 本店", type: "main", city: "nagoya", desc: "厚切壽司", link: "https://www.google.com/maps/search/?api=1&query=Sengoku+Sushi" },
-            { name: "麵屋獅子丸", type: "main", city: "nagoya", desc: "雞白湯拉麵", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" },
+            { name: "麵家獅子丸", type: "main", city: "nagoya", desc: "雞白湯拉麵", link: "https://www.google.com/maps/search/?api=1&query=Menya+Shishimaru" },
             { name: "カツレツMATUMURA", type: "main", city: "nagoya", desc: "中日大樓法式炸列", link: "https://www.google.com/maps/place/%E3%82%AB%E3%83%84%E3%83%AC%E3%83%84MATUMURA+bis+CHUNICHI+BUILDNG+(%E3%83%9E%E3%83%84%E3%83%A0%E3%83%A0%E3%83%A9)+%E4%B8%AD%E6%97%A5%E3%83%93%E3%83%AB/@35.1684205,136.9000343,16z/data=!3m1!5s0x600370d1079468f7:0xd5cac200e2569c2f!4m6!3m5!1s0x600371002136925b:0x1fcd87ee4ab4920!8m2!3d35.1685893!4d136.9095615!16s%2Fg%2F11vrt0580h?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "ぴよりんshop", type: "sweet", city: "nagoya", desc: "超萌小雞蛋糕", link: "https://www.google.com/maps/place/Piyorin+Shop/@35.1704637,136.8831953,18.75z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x600377134cf13ea5:0x7d5ed9e5ae4c790a!8m2!3d35.1702467!4d136.8829448!16s%2Fg%2F11n0rffl_j?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "艾許奶油 Échiré Nagoya", type: "sweet", city: "nagoya", desc: "法國頂級奶油甜點", link: "https://www.google.com/maps/place/%E8%89%BE%E8%A8%B1%E5%A5%B6%E6%B2%B9+%C3%89chir%C3%A9+Nagoya/@35.1690408,136.8828052,17z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x6003771b980d0c31:0x297e966cd689def8!8m2!3d35.1714232!4d136.8827795!16s%2Fg%2F11mb_rjw6w?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "坂角総本舖", type: "sweet", city: "nagoya", desc: "名古屋必買蝦仙貝", link: "https://www.google.com/maps/place/%E5%9D%82%E8%A7%92%E7%B8%BD%E6%9C%AC%E8%88%96+JR%E5%90%8D%E5%8F%A4%E5%B1%8B%E9%AB%98%E5%B3%B6%E5%B1%8B%E5%BA%97/@35.1705747,136.8783455,17z/data=!3m1!5s0x600376dc5872cb01:0x4ceb5b055da25ba0!4m6!3m5!1s0x6003778f271b7a2d:0x4b9a801f7ba42a24!8m2!3d35.1705747!4d136.8831091!16s%2Fg%2F11sp78mqrl?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "青柳総本家", type: "sweet", city: "nagoya", desc: "青蛙饅頭", link: "https://www.google.com/maps/place/%E9%9D%92%E8%9B%99%E9%A5%85%E9%A0%AD+%E9%9D%92%E6%9F%B3%E7%B8%BD%E6%9C%AC%E5%AE%B6+%E5%A4%A7%E9%A0%88%E6%9C%AC%E5%BA%97/@35.1591893,136.8992055,18z/data=!3m1!4b1!4m6!3m5!1s0x60037733af08e0ed:0xedaefbcb7189d2cc!8m2!3d35.159188!4d136.899971!16s%2Fg%2F1vhly352?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
-            { name: "大須ういろ", type: "sweet", city: "nagoya", desc: "大須外郎糕", link: "https://www.google.com/maps/place/%E5%A4%A7%E9%A0%88%E5%A4%96%E9%83%8E+%E6%9C%AC%E5%BA%97/@35.1590265,136.8990214,18z/data=!4m14!1m7!3m6!1s0x600377330822ed27:0xc1454f0e409b8f96!2z5aSn6aCI5aSW6YOOIOacrOW6lw!8m2!3d35.1590243!4d136.9003089!16s%2Fg%2F1tfp2cy1?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "大須ういろ", type: "sweet", city: "nagoya", desc: "大須外郎糕", link: "https://www.google.com/maps/place/%E5%A4%A9%E5%A9%A6%E7%BE%85+%E5%AF%8C%E5%B1%B1%E7%99%BD%E8%9D%A6%E4%BA%AD/@36.7010207,137.2140737,15z/data=!3m1!5s0x5ff7909c44b208f7:0x5e0c9e59c19c3b0!4m6!3m5!1s0x5ff7909cedc3043f:0xff6ff6357c9f6c19!8m2!3d36.7010207!4d137.2140737!16s%2Fg%2F1tlwfhfl?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "鳴門鯛燒本舖", type: "sweet", city: "nagoya", desc: "天然一丁燒", link: "https://www.google.com/maps/place/Naruto+Taiyaki+Honpo/@35.1582373,136.9018442,17z/data=!4m14!1m7!3m6!1s0x6003719ca25193a9:0x3eabfe76576f6fb7!2sNaruto+Taiyaki+Honpo!8m2!3d35.1582329!4d136.9044191!16s%2Fg%2F11gjs95trd?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "馬喰一代", type: "main", city: "nagoya", desc: "飛驒牛燒肉", link: "https://www.google.com/maps/search/?api=1&query=Bakuroichidai" },
             { name: "ふみ屋", type: "main", city: "nagoya", desc: "居酒屋", link: "https://www.google.com/maps/search/?api=1&query=Fumiya+Nishiki" },
             { name: "つばめパン＆Milk", type: "sweet", city: "nagoya", desc: "天然酵母吐司", link: "https://www.google.com/maps/place/Tsubame+Bread+%26+Milk/@35.168593,136.884341,17z/data=!3m2!4b1!5s0x600376deeab9380d:0xd7e07c212417ba49!4m6!3m5!1s0x6003779c0c667e25:0x751d9502b2a24446!8m2!3d35.1685886!4d136.8869159!16s%2Fg%2F11n85ysq8s?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "千里馬藥局", type: "sweet", city: "nagoya", desc: "大型藥妝店", link: "https://www.google.com/maps/place/%E5%8D%83%E9%87%8C%E9%A6%AC%E8%97%A5%E5%B1%8B/@35.1677588,136.8783993,16z/data=!4m6!3m5!1s0x600376e6fe095555:0x835be5a4f8904eb5!8m2!3d35.1689651!4d136.8809567!16s%2Fg%2F1tjcpcks?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "ダイコクドラッグ", type: "sweet", city: "nagoya", desc: "大國藥妝", link: "https://www.google.com/maps/place/%E3%83%80%E3%82%A4%E3%82%B3%E3%82%AF%E3%83%89%E3%83%A9%E3%83%A3%E3%82%B0%E5%90%8D%E5%8F%A4%E5%B1%8B%E6%96%B0%E5%B9%B9%E7%B7%9A%E5%8F%A3%E5%BA%97/@35.1677588,136.8783993,16z/data=!4m6!3m5!1s0x6003770e6d4c4e65:0x2cfdea6866d1132f!8m2!3d35.1715573!4d136.8786935!16s%2Fg%2F11yhrz0byr?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             // Takayama
             { name: "味藏天國", type: "main", city: "takayama", desc: "JA直營燒肉", link: "https://www.google.com/maps/search/?api=1&query=Ajikura+Tengoku" },
             { name: "丸明", type: "main", city: "takayama", desc: "飛驒牛專賣", link: "https://www.google.com/maps/search/?api=1&query=Maruaki+Takayama" },
@@ -669,6 +679,20 @@
             { name: "林盛堂", type: "sweet", city: "takayama", desc: "玉天點心", link: "https://www.google.com/maps/search/?api=1&query=Rinseido" },
             { name: "えび八", type: "main", city: "takayama", desc: "天婦羅", link: "https://www.google.com/maps/search/?api=1&query=Ebiya+Takayama" },
             { name: "寿美久", type: "main", city: "takayama", desc: "手打蕎麥麵", link: "https://www.google.com/maps/search/?api=1&query=Sumiku+Takayama" },
+            { name: "Koma Coffee", type: "sweet", city: "takayama", desc: "餅乾咖啡杯", link: "https://www.google.com/maps/place/Koma+Coffee/@36.1438526,137.2583327,18z/data=!4m6!3m5!1s0x6002bad74af5c1a5:0x7ce16a77af43861a!8m2!3d36.1437665!4d137.2581404!16s%2Fg%2F11f11fs30z?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "Takoyaki Sago", type: "sweet", city: "takayama", desc: "醬油章魚燒", link: "https://www.google.com/maps/place/Takoyaki+Sago/@36.1438526,137.2583327,18z/data=!4m6!3m5!1s0x6002bad74a7fd127:0x4e08bed06679451d!8m2!3d36.1439649!4d137.2580032!16s%2Fg%2F11hb45dyq3?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "Takayama Rinseido", type: "sweet", city: "takayama", desc: "玉天(烤蛋燒)", link: "https://www.google.com/maps/place/Takayama+Rinseido/@36.1438526,137.2583327,18z/data=!4m6!3m5!1s0x6002bad72a837543:0xd0690130f1ade84d!8m2!3d36.1450338!4d137.2579746!16s%2Fg%2F1wv_s3t3?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "壽俵屋 犬山庵", type: "sweet", city: "nagoya", desc: "醬油鍋巴串", link: "https://www.google.com/maps/place/%E5%A3%BD%E4%BF%B5%E5%B1%8B+%E7%8A%AC%E5%B1%B1%E5%BA%B5/@35.3831088,136.9387996,18.75z/data=!4m6!3m5!1s0x60030e8a55373ee5:0x2cc95c442196bead!8m2!3d35.3832586!4d136.9393081!16s%2Fg%2F1tjz7w3h?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "蘭丸", type: "sweet", city: "nagoya", desc: "人氣串燒", link: "https://www.google.com/maps/place/Ranmaru/@35.3831088,136.9387996,18.75z/data=!4m6!3m5!1s0x60030f91bb0f8bd3:0xf7e0455268adc67c!8m2!3d35.3832351!4d136.9395314!16s%2Fg%2F11k99mkqly?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "クシカツとなまる", type: "sweet", city: "nagoya", desc: "酥脆串炸", link: "https://www.google.com/maps/place/Tonamaru/@35.3831088,136.9387996,18.75z/data=!4m6!3m5!1s0x60030f292d8712bf:0xbfbd35315d146bc2!8m2!3d35.3834274!4d136.9393891!16s%2Fg%2F11ryrdg_rc?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "こって牛", type: "sweet", city: "takayama", desc: "飛驒特牛壽司", link: "https://www.google.com/maps/place/%E9%A3%9B%E9%A9%92+%E7%89%B9%E7%89%9B+%E5%A3%BD%E5%8F%B8%E5%B0%88%E8%B3%A3%E5%BA%97/@36.1419434,137.2591814,19.75z/data=!4m6!3m5!1s0x6002bada3ed8331b:0xec7a2535306cd9b8!8m2!3d36.142201!4d137.2593308!16s%2Fg%2F12qgrwyt3?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "さんまち", type: "main", city: "takayama", desc: "高山拉麵", link: "https://www.google.com/maps/place/Sanmachi/@36.1417859,137.2591557,17z/data=!4m6!3m5!1s0x6002bb5c689fe26d:0x63401146a1833cd4!8m2!3d36.1404852!4d137.2596494!16s%2Fg%2F11t3fgzq0r?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "原田酒造場", type: "sweet", city: "takayama", desc: "山車地酒", link: "https://www.google.com/maps/place/%E5%8E%9F%E7%94%B0%E6%B8%85%E9%85%92%E9%87%80%E9%85%92%E5%BB%A0%E5%9C%B0%E6%96%B9/@36.1406742,137.259637,18.5z/data=!4m6!3m5!1s0x6002badbc9b5fb21:0x88ea33ed694479fe!8m2!3d36.1406856!4d137.2592919!16s%2Fg%2F1tdmpzl1?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "舩坂酒造店", type: "sweet", city: "takayama", desc: "柚子酒", link: "https://www.google.com/maps/place/%E8%88%A9%E5%9D%82%E9%85%92%E9%80%A0%E5%BA%97/@36.1406742,137.259637,18.5z/data=!4m6!3m5!1s0x6002badbba0a579f:0xd29ac2497563af25!8m2!3d36.140741!4d137.2597061!16s%2Fg%2F1tftq_q_?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "キッセ・キッセ", type: "sweet", city: "takayama", desc: "法式吐司", link: "https://www.google.com/maps/search/?api=1&query=Kisse+Kisse+Takayama" },
+            { name: "傳谷", type: "sweet", city: "takayama", desc: "飯糰麵包", link: "https://www.google.com/maps/place/%E5%82%B3%E8%B0%B7%EF%BC%88%E3%81%A7%E3%82%93%E3%81%9F%E3%81%AB%EF%BC%89/@36.1401398,137.2578574,20z/data=!4m6!3m5!1s0x6002bb3dc96f3f2b:0x3235a47640e352af!8m2!3d36.1401398!4d137.2578574!16s%2Fg%2F11scrdlvm9?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "たなか屋", type: "main", city: "toyama", desc: "白川鄉蕎麥麵", link: "https://www.google.com/maps/place/Tanaka-ya/@36.2583516,136.9065519,17z/data=!3m1!4b1!4m6!3m5!1s0x5ff871bbea4f3923:0x9af7070cd011ddad!8m2!3d36.258349!4d136.908083!16s%2Fg%2F1vfp81jb?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
+            { name: "落人", type: "sweet", city: "toyama", desc: "合掌村紅豆湯", link: "https://www.google.com/maps/search/?api=1&query=Ochudo+Shirakawago" },
             // Toyama/Himi (Updated)
             { name: "バンブス (Bambus)", type: "sweet", city: "toyama", desc: "麵包種類豐富，牛奶奶油三明治最美味", link: "https://www.google.com/maps/place/%E3%83%90%E3%83%B3%E3%83%96%E3%82%B9/@36.6889573,137.2162459,18.58z/data=!4m9!1m2!2m1!1z54OY54SZ!3m5!1s0x5ff7908adc153fe5:0xc6a66f7e5517d7c7!8m2!3d36.6892057!4d137.2172072!16s%2Fg%2F1tctfg3b?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
             { name: "新とんかつ (Shin Tonkatsu)", type: "main", city: "toyama", desc: "老字號日式炸豬排", link: "https://www.google.com/maps/place/Shin+Tonkatsu/@36.6886361,137.2111454,17.5z/data=!3m1!5s0x5ff7908a8793cf17:0xa1f51866f64fee69!4m6!3m5!1s0x5ff7908a63f855e3:0x900537d5a13c5e7!8m2!3d36.6893625!4d137.2140511!16s%2Fg%2F1tcz851s?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" },
@@ -733,7 +757,7 @@
             const totalDining = GROUP_SIZE * totalDiningJPY * JPY_TWD_RATE;
 
             // Entry - Updated removing Hida Folk Village
-            const totalEntryJPY = COSTS.ENTRY.犬山城 + COSTS.ENTRY.德川園 + COSTS.ENTRY.高山陣屋 + COSTS.ENTRY.飛驒之里 + COSTS.ENTRY.兼六園 + COSTS.ENTRY.TOYAMA_GLASS;
+            const totalEntryJPY = COSTS.ENTRY.犬山城 + COSTS.ENTRY.德川園 + COSTS.ENTRY.熱田神宮 + COSTS.ENTRY.高山陣屋 + COSTS.ENTRY.飛驒之里 + COSTS.ENTRY.兼六園 + COSTS.ENTRY.TOYAMA_GLASS;
             const totalEntry = GROUP_SIZE * totalEntryJPY * JPY_TWD_RATE;
 
             return {
@@ -750,6 +774,19 @@
             userChoices[dayKey] = optionId;
             renderItinerary(); // Re-render to update selected state UI
             updateChart(); // Update budget chart
+        };
+        
+        // Helper function to toggle image visibility
+        window.toggleImage = function(id) {
+            const imgContainer = document.getElementById(id);
+            const arrow = document.getElementById('arrow-' + id);
+            if (imgContainer.classList.contains('hidden')) {
+                imgContainer.classList.remove('hidden');
+                if(arrow) arrow.classList.add('rotate-180');
+            } else {
+                imgContainer.classList.add('hidden');
+                if(arrow) arrow.classList.remove('rotate-180');
+            }
         };
 
         function updateChart() {
@@ -782,7 +819,7 @@
                     <div id="content-${index}" class="mt-4 ${hiddenClass} overflow-hidden transition-all duration-500 ease-in-out">
                         <div class="relative pl-6 pt-4">
                             <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 timeline-line"></div>
-                            ${day.events.map(event => {
+                            ${day.events.map((event, eventIdx) => {
                                 if (event.type === 'choice') {
                                     return `
                                     <div class="relative flex flex-col mb-6 last:mb-0 ml-10">
@@ -805,7 +842,7 @@
                                                         <p class="text-sm font-semibold text-gray-700">約 ${opt.price} JPY</p>
                                                     </div>
                                                     <a href="${opt.link}" target="_blank" onclick="event.stopPropagation()" class="text-blue-500 hover:text-blue-700 text-xs font-medium mt-3 inline-block">
-                                                        <i class="fa-solid fa-location-dot mr-1"></i>Google Maps
+                                                        <i class="fa-solid fa-location-dot mr-1"></i>地圖
                                                     </a>
                                                 </div>
                                                 `;
@@ -835,7 +872,7 @@
                                                         <h5 class="font-bold text-sm text-[#334155] mb-1">${item.name}</h5>
                                                         <p class="text-xs text-gray-500 mb-2">${item.desc}</p>
                                                         <a href="${item.link}" target="_blank" class="text-blue-500 hover:text-blue-700 text-xs font-medium block mt-1">
-                                                            <i class="fa-solid fa-location-dot mr-1"></i>Map
+                                                            <i class="fa-solid fa-location-dot mr-1"></i>地圖
                                                         </a>
                                                     </div>
                                                 `).join('')}
@@ -855,7 +892,19 @@
                                                 <h4 class="font-semibold text-gray-800">${event.title}</h4>
                                             </div>
                                             <p class="text-sm text-gray-500">${event.desc}</p>
-                                            ${event.link ? `<a href="${event.link}" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block"><i class="fa-solid fa-location-dot mr-1"></i>Google Maps</a>` : ''}
+                                            ${event.link ? `<a href="${event.link}" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm font-medium mt-1 inline-block mr-3"><i class="fa-solid fa-location-dot mr-1"></i>地圖</a>` : ''}
+                                            ${event.image ? `
+                                            <div class="mt-2">
+                                                <button onclick="toggleImage('img-${index}-${eventIdx}')" class="text-orange-500 hover:text-orange-700 text-sm font-medium inline-flex items-center transition-colors focus:outline-none">
+                                                    <i class="fa-solid fa-image mr-1"></i>
+                                                    <span>查看美食圖片</span>
+                                                    <i id="arrow-img-${index}-${eventIdx}" class="fa-solid fa-chevron-down text-xs ml-1 transition-transform duration-200"></i>
+                                                </button>
+                                                <div id="img-${index}-${eventIdx}" class="hidden mt-2 transition-all duration-300 ease-in-out origin-top">
+                                                    <img src="${event.image}" alt="${event.title} 美食圖片" class="rounded-lg shadow-md w-full sm:max-w-md h-auto object-cover border border-gray-100">
+                                                </div>
+                                            </div>
+                                            ` : ''}
                                         </div>
                                     </div>
                                     `;
@@ -945,6 +994,7 @@
                 btn.addEventListener('click', (e) => {
                     filterBtns.forEach(b => {
                         b.classList.remove('bg-[#14B8A6]', 'text-white', 'shadow-md');
+                        // Ensure border width is set for inactive state as well to prevent jumping
                         b.classList.add('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
                     });
                     e.target.classList.remove('bg-white', 'text-gray-600', 'border-gray-300', 'hover:bg-teal-50');
